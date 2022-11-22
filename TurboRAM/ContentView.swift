@@ -16,7 +16,9 @@ struct ContentView: View {
 		}
 		.padding()
 		.onAppear(perform: {
-			_ = MemoryInfo.getMemoryInfo()
+			for i in MemoryInfo.getMemoryInfo() {
+				print(i.processName, i.memoryUsage)
+			}
 		})
 	}
 }
