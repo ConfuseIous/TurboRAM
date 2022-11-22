@@ -10,5 +10,5 @@ import Foundation
 struct ProcessDetails {
 	var processName: String
 	var memoryUsage: Float
-	var cpuUsage: Float
+//	var cpuUsage: Float
 }

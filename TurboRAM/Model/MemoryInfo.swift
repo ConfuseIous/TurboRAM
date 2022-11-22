@@ -9,7 +9,7 @@ import AppKit
 import Foundation
 
 struct MemoryInfo {
-	static func getMemoryInfo() -> [String]? {
+	static func getMemoryInfo() -> [ProcessDetails] {
 		let task = Process()
 		let pipe = Pipe()
 		
@@ -34,52 +34,49 @@ struct MemoryInfo {
 		
 		let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
 		
-		print(output)
-		
-		// Remove all empty strings
-//		var columns = output.components(separatedBy: " ")
-//
-//		for (indecolumns, l) in columns.enumerated() {
-//			columns[indecolumns] = l.trimmingCharacters(in: .whitespacesAndNewlines)
-//		}
-//
-//		columns = columns.filter { $0 != "" }
+		var columns = output.components(separatedBy: "\n")
+
+		for (indecolumns, l) in columns.enumerated() {
+			columns[indecolumns] = l.trimmingCharacters(in: .whitespacesAndNewlines)
+		}
+
+		// Remove empty columns
+		columns = columns.filter { $0 != "" }
 		
 		// Remove headings
-//		if let index = columns.firstIndex(where: {$0.contains("KSHRD")}) {
-//			columns.removeSubrange(0...index)
-//		}
+		if let index = columns.firstIndex(where: {$0.contains("MEM")}) {
+			columns.removeSubrange(0...index)
+		}
 		
-		// print(columns)
+		var processes: [ProcessDetails] = []
 		
-		// Each row has 36 columns
-//		let numRows: Float = (Float(columns.count)/36)
-//
-//		print(numRows, columns.count)
+		for column in columns {
+			var memoryUsageString = ""
+			
+			// Go backwards until you find a space
+			for (index, character) in column.reversed().enumerated() {
+				memoryUsageString.append(character)
+				if character == " " {
+					// Find Process Name
+					let processNameEndIndex = column.index(column.endIndex, offsetBy: (-1 * (index + 1)))
+					let processName = String(column[...processNameEndIndex])
+					
+					// Calculate Memory Usage in MB
+					memoryUsageString = String(memoryUsageString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines)
+					
+					let memoryUsageStringIndex = memoryUsageString.index(memoryUsageString.endIndex, offsetBy: -1)
+					var memoryUsage = Float(String(memoryUsageString[..<memoryUsageStringIndex]))!
+					
+					if memoryUsageString.last == "K" {
+						memoryUsage /= 1000
+					}
+					
+					processes.append(ProcessDetails(processName: processName, memoryUsage: memoryUsage))
+					break
+				}
+			}
+		}
 		
-		//		for i in 0...numRows {
-//		for i in 0...10 {
-//			//			print("i", i, "PROCESS:", columns[i * 35], "PID:", columns[(i * 35) + 1], "MEMORY:", columns[(i * 35) + 6])
-//			print("i", i, "PROCESS:", columns[i * 36])
-//		}
-//
-//		print(columns[4 * 36])
-//		print(columns[(4 * 36) + 1])
-		
-		//		for i in 0...34 {
-		//			print(columns[i])
-		//		}
-		
-		// The first column represnts the process name and the seventh column represents memory
-		//		print("PROCESS:", columns[0], "MEMORY:", columns[6])
-		
-		// let y = [[]]
-		
-		// for (index, l) in columns.enumerated() {
-		//
-		// }
-		
-//		return columns
-		return []
+		return processes
 	}
 }
