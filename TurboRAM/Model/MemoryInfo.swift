@@ -58,10 +58,6 @@ struct MemoryInfo {
 			
 			let reversedColumn = column.reversed()
 			
-//			print(column)
-			
-			let indexOfSpace = reversedColumn.first(where: {$0 == " "})
-			
 			for (index, character) in reversedColumn.enumerated() {
 				propertyString += String(character)
 				// Go backwards until you find a space
@@ -93,7 +89,6 @@ struct MemoryInfo {
 						currentProcess.processName = processName
 						currentProcess.memoryUsage = memoryUsage
 						
-						print(currentProcess.processName, currentProcess.memoryUsage, currentProcess.id)
 						processes.append(currentProcess)
 						break
 					}

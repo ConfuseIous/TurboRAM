@@ -10,7 +10,7 @@
 		3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5B8FD92929551F004AC381 /* ProcessDetails.swift */; };
 		3C60D4F52921ED1200283F91 /* MemoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60D4F42921ED1200283F91 /* MemoryInfo.swift */; };
 		3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */; };
-		3CD43272291FB9FF0020B7FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD43271291FB9FF0020B7FB /* ContentView.swift */; };
+		3CD43272291FB9FF0020B7FB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD43271291FB9FF0020B7FB /* HomeView.swift */; };
 		3CD43274291FBA000020B7FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CD43273291FBA000020B7FB /* Assets.xcassets */; };
 		3CD43277291FBA000020B7FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CD43276291FBA000020B7FB /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -20,7 +20,7 @@
 		3C60D4F42921ED1200283F91 /* MemoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryInfo.swift; sourceTree = "<group>"; };
 		3CD4326C291FB9FF0020B7FB /* TurboRAM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TurboRAM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboRAMApp.swift; sourceTree = "<group>"; };
-		3CD43271291FB9FF0020B7FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3CD43271291FB9FF0020B7FB /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3CD43273291FBA000020B7FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3CD43276291FBA000020B7FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3CD43278291FBA000020B7FB /* TurboRAM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TurboRAM.entitlements; sourceTree = "<group>"; };
@@ -66,7 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */,
-				3CD43271291FB9FF0020B7FB /* ContentView.swift */,
+				3CD43271291FB9FF0020B7FB /* HomeView.swift */,
 				3C60D4F32921ED0200283F91 /* Model */,
 				3CD43273291FBA000020B7FB /* Assets.xcassets */,
 				3CD43278291FBA000020B7FB /* TurboRAM.entitlements */,
@@ -154,7 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */,
-				3CD43272291FB9FF0020B7FB /* ContentView.swift in Sources */,
+				3CD43272291FB9FF0020B7FB /* HomeView.swift in Sources */,
 				3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */,
 				3C60D4F52921ED1200283F91 /* MemoryInfo.swift in Sources */,
 			);
