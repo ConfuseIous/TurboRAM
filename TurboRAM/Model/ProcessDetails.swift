@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct ProcessDetails {
+struct ProcessDetails: Identifiable {
+	// id represents PID
+	var id: Int
 	var processName: String
 	var memoryUsage: Float
 //	var cpuUsage: Float

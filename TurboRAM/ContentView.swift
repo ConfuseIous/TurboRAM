@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+	
+	@State private var processDetails: [ProcessDetails] = MemoryInfo.getMemoryInfo()
+	
 	var body: some View {
-		VStack {
-			Image(systemName: "globe")
-				.imageScale(.large)
-				.foregroundColor(.accentColor)
+		NavigationStack {
+			VStack {
+				List(processDetails) { detail in
+					Text(detail.processName)
+				}
+			}.navigationTitle("TurboRAM")
 		}
 		.padding()
-		.onAppear(perform: {
-			for i in MemoryInfo.getMemoryInfo() {
-				print(i.processName, i.memoryUsage)
-			}
-		})
+//		.onAppear(perform: {
+//			for i in MemoryInfo.getMemoryInfo() {
+//				print(i.processName, i.memoryUsage)
+//			}
+//		})
 	}
 }

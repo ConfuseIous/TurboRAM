@@ -19,9 +19,9 @@ struct MemoryInfo {
 		
 		//		task.launchPath = "/bin/ps"
 		//		task.arguments = ["-f", "-v", "-A"]
-
+		
 		task.launchPath = "/usr/bin/top"
-		task.arguments = ["-o", "mem", "-l", "1", "-stats", "command,mem"]
+		task.arguments = ["-o", "mem", "-l", "1", "-stats", "command,mem,pid"]
 		task.standardOutput = pipe
 		try? task.run()
 		let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -35,11 +35,11 @@ struct MemoryInfo {
 		let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
 		
 		var columns = output.components(separatedBy: "\n")
-
+		
 		for (indecolumns, l) in columns.enumerated() {
 			columns[indecolumns] = l.trimmingCharacters(in: .whitespacesAndNewlines)
 		}
-
+		
 		// Remove empty columns
 		columns = columns.filter { $0 != "" }
 		
@@ -51,28 +51,52 @@ struct MemoryInfo {
 		var processes: [ProcessDetails] = []
 		
 		for column in columns {
-			var memoryUsageString = ""
+			var currentProcess = ProcessDetails(id: 0, processName: "", memoryUsage: 0)
 			
-			// Go backwards until you find a space
-			for (index, character) in column.reversed().enumerated() {
-				memoryUsageString.append(character)
-				if character == " " {
-					// Find Process Name
-					let processNameEndIndex = column.index(column.endIndex, offsetBy: (-1 * (index + 1)))
-					let processName = String(column[...processNameEndIndex])
-					
-					// Calculate Memory Usage in MB
-					memoryUsageString = String(memoryUsageString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines)
-					
-					let memoryUsageStringIndex = memoryUsageString.index(memoryUsageString.endIndex, offsetBy: -1)
-					var memoryUsage = Float(String(memoryUsageString[..<memoryUsageStringIndex]))!
-					
-					if memoryUsageString.last == "K" {
-						memoryUsage /= 1000
+			var currentProperty = 0
+			var propertyString = ""
+			
+			let reversedColumn = column.reversed()
+			
+//			print(column)
+			
+			let indexOfSpace = reversedColumn.first(where: {$0 == " "})
+			
+			for (index, character) in reversedColumn.enumerated() {
+				propertyString += String(character)
+				// Go backwards until you find a space
+				if character == " " && reversedColumn[reversedColumn.index(reversedColumn.startIndex, offsetBy: index - 1)] != " " {
+					if currentProperty == 0 {
+						// Find process PID
+						currentProcess.id = Int(String(propertyString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines))!
+						currentProperty += 1
+					} else {
+						// Find Process Name
+						let processNameEndIndex = column.index(column.endIndex, offsetBy: (-1 * (index + 1)))
+						
+						let processName = String(column[...processNameEndIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
+						
+						// Calculate Memory Usage in MB
+						propertyString = String(propertyString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines)
+						
+						let memoryUsageStringIndex = propertyString.index(propertyString.endIndex, offsetBy: ((String(currentProcess.id).count) * -1) - 1)
+						propertyString = String(propertyString[..<memoryUsageStringIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
+						
+						let memoryUsageIndex = propertyString.index(propertyString.endIndex, offsetBy: -1)
+						let memoryUsageString = String(propertyString[..<memoryUsageIndex])
+						var memoryUsage = Float(memoryUsageString)!
+						
+						if propertyString.last == "K" {
+							memoryUsage /= 1000
+						}
+						
+						currentProcess.processName = processName
+						currentProcess.memoryUsage = memoryUsage
+						
+						print(currentProcess.processName, currentProcess.memoryUsage, currentProcess.id)
+						processes.append(currentProcess)
+						break
 					}
-					
-					processes.append(ProcessDetails(processName: processName, memoryUsage: memoryUsage))
-					break
 				}
 			}
 		}
