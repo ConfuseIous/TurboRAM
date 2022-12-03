@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HomeView.swift
 //  TurboRAM
 //
 //  Created by Karandeep Singh on 12/11/22.
@@ -88,9 +88,14 @@ struct HomeView: View {
 				TableColumn("Process ID") { Text(String($0.id)) }
 			}
 		}
+		.frame(width: 800, height: 800)
 		.sheet(isPresented: $shouldShowSettingsSheet, content: {
-			Text("helo")
+			SettingsView()
+		})
+		.sheet(isPresented: $shouldShowInfoSheet, content: {
+			InfoView()
 		})
 		.padding()
+		.fixedSize(horizontal: true, vertical: false)
 	}
 }
