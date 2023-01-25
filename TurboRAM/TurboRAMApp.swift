@@ -12,6 +12,7 @@ struct TurboRAMApp: App {
 	var body: some Scene {
 		WindowGroup {
 			HomeView()
+				.environmentObject(MemoryInfoViewModel())
 		}.windowResizability(.contentSize)
 	}
 }

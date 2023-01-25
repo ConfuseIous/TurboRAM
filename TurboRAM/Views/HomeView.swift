@@ -9,13 +9,16 @@ import SwiftUI
 
 struct HomeView: View {
 	
+	let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // Check every minute
+	
 	@State private var rotationAngle: Angle = Angle(degrees: 0)
 	
 	@State private var shouldShowSettingsSheet = false
 	@State private var shouldShowInfoSheet = false
 	
 	@State private var selectedIndex: Int?
-	@State private var processDetails: [ProcessDetails] = MemoryInfo.getMemoryInfo()
+	
+	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
 	
 	var body: some View {
 		VStack {
@@ -28,7 +31,7 @@ struct HomeView: View {
 						Button(action: {
 							withAnimation {
 								rotationAngle += Angle(degrees: 360)
-								processDetails = MemoryInfo.getMemoryInfo()
+								memoryInfoViewModel.reloadMemoryInfo()
 							}
 						}) {
 							Image(systemName: "arrow.clockwise.circle")
@@ -81,12 +84,22 @@ struct HomeView: View {
 						.padding()
 					}
 				}
-			}
-			Table(processDetails, selection: $selectedIndex) {
+			}.contentShape(Rectangle()) // Makes the entire area tappable
+			Table(memoryInfoViewModel.processes, selection: $selectedIndex) {
 				TableColumn("Name", value: \.processName)
-				TableColumn("Memory Used (Gigabytes)") { Text(String($0.memoryUsage)) }
+				TableColumn("Memory Used (Megabytes)") { Text(String($0.memoryUsage)) }
 				TableColumn("Process ID") { Text(String($0.id)) }
 			}
+		}
+		.onAppear() {
+			memoryInfoViewModel.reloadMemoryInfo()
+		}
+		.onReceive(timer) { _ in
+			memoryInfoViewModel.reloadMemoryInfo()
+			#warning("check for increases here")
+		}
+		.onTapGesture {
+			selectedIndex = nil
 		}
 		.frame(width: 800, height: 800)
 		.sheet(isPresented: $shouldShowSettingsSheet, content: {
