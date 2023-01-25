@@ -10,7 +10,7 @@ import Foundation
 
 class MemoryInfoViewModel: ObservableObject {
 	
-	var initialValues: [ProcessDetails] = []
+	var initialValues: [Int : Float] = [:] // Dictionary allows for 0(1) lookup time instead of 0(n)
 	
 	@Published var processes: [ProcessDetails] = []
 	
@@ -18,13 +18,11 @@ class MemoryInfoViewModel: ObservableObject {
 		let task = Process()
 		let pipe = Pipe()
 		
-		/* While both top and ps should work in theory, ps seems to underreport memory in practice.
-		 Rely on top instead.
-		 */
 		
 		//		task.launchPath = "/bin/ps"
 		//		task.arguments = ["-f", "-v", "-A"]
 		//		ps -ax -o vsize
+		
 		task.launchPath = "/usr/bin/top"
 		task.arguments = ["-o", "mem", "-l", "1", "-stats", "command,mem,pid"]
 		task.standardOutput = pipe
@@ -48,7 +46,7 @@ class MemoryInfoViewModel: ObservableObject {
 		
 		let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
 		
-		print(output)
+		//		print(output)
 		
 		var columns = output.components(separatedBy: "\n")
 		
@@ -117,12 +115,25 @@ class MemoryInfoViewModel: ObservableObject {
 			sum += process.memoryUsage
 		}
 		
-		print("TOTAL RAM USED:", sum)
+		//		print("TOTAL RAM USED:", sum)
 		
 		if initialValues.isEmpty {
-			self.initialValues = processes
+			self.initialValues = processes.reduce(into: [Int: Float]()) {
+				$0[$1.id] = $1.memoryUsage
+			}
+			
+			self.processes = processes
+		}
+	}
+	
+	func compareMemoryUsageToOriginal() -> [ProcessDetails] {
+		// Returns all processes that grew memory usage by at least 20% since the first run
+		let commonProcesses: [ProcessDetails] = processes.compactMap { process in
+			guard let compared = initialValues[process.id], process.memoryUsage > (compared * 1.2) else { return nil }
+			return process
 		}
 		
-		self.processes = processes
+		return commonProcesses
 	}
 }
+

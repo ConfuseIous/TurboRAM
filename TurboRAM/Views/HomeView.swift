@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
 	
+	let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // Check every minute
+	
 	@State private var rotationAngle: Angle = Angle(degrees: 0)
 	
 	@State private var shouldShowSettingsSheet = false
@@ -91,6 +93,10 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
+		}
+		.onReceive(timer) { _ in
+			memoryInfoViewModel.reloadMemoryInfo()
+			#warning("check for increases here")
 		}
 		.onTapGesture {
 			selectedIndex = nil
