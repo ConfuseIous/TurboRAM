@@ -11,12 +11,15 @@ struct HomeView: View {
 	
 	let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // Check every minute
 	
+	@State private var selectedIndex: Int?
+	
 	@State private var rotationAngle: Angle = Angle(degrees: 0)
 	
 	@State private var shouldShowSettingsSheet = false
 	@State private var shouldShowInfoSheet = false
 	
-	@State private var selectedIndex: Int?
+	@State private var shouldShowWarningSheet = false
+	@State private var offendingProcesses: [ProcessDetails] = []
 	
 	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
 	
@@ -93,10 +96,14 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
+			shouldShowWarningSheet.toggle()
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()
-			#warning("check for increases here")
+			offendingProcesses = memoryInfoViewModel.findOffendingProcesses()
+			if !offendingProcesses.isEmpty {
+				shouldShowWarningSheet.toggle()
+			}
 		}
 		.onTapGesture {
 			selectedIndex = nil
@@ -107,6 +114,9 @@ struct HomeView: View {
 		})
 		.sheet(isPresented: $shouldShowInfoSheet, content: {
 			InfoView()
+		})
+		.sheet(isPresented: $shouldShowWarningSheet, content: {
+			WarningView(processes: memoryInfoViewModel.processes)
 		})
 		.padding()
 		.fixedSize(horizontal: true, vertical: false)
