@@ -13,6 +13,10 @@ struct TurboRAMApp: App {
 		WindowGroup {
 			HomeView()
 				.environmentObject(MemoryInfoViewModel())
+				.onAppear {
+					let window = NSApp.windows.first
+					window?.level = .floating
+				}
 		}.windowResizability(.contentSize)
 	}
 }

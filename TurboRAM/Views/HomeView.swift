@@ -96,6 +96,7 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
+			offendingProcesses = memoryInfoViewModel.processes
 			shouldShowWarningSheet.toggle()
 		}
 		.onReceive(timer) { _ in
@@ -116,7 +117,7 @@ struct HomeView: View {
 			InfoView()
 		})
 		.sheet(isPresented: $shouldShowWarningSheet, content: {
-			WarningView(processes: memoryInfoViewModel.processes)
+			WarningView(processes: offendingProcesses)
 		})
 		.padding()
 		.fixedSize(horizontal: true, vertical: false)

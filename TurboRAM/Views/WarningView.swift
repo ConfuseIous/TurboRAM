@@ -24,35 +24,48 @@ struct WarningView: View {
 			}
 			Divider()
 			Spacer()
-			ForEach(processes) { process in
+			List(processes) { process in
 				ZStack {
-					RoundedRectangle(cornerRadius: 20)
-					HStack {
-						Text(process.processName)
-						Spacer()
-					}
-					HStack {
-						Text("Current Usage: \(process.memoryUsage)MB")
-						Spacer()
-					}
-					Button(action: {
-						
-					}, label: {
-						Text("Quit Process")
-					})
-					Button(action: {
-						
-					}, label: {
-						Text("Ignore Process Today")
-					})
-					Button(action: {
-						
-					}, label: {
-						Text("Ignore Process Forever")
-					})
+					RoundedRectangle(cornerRadius: 10)
+						.foregroundColor(Color(nsColor: .windowBackgroundColor))
+					VStack {
+						HStack {
+							Text(process.processName)
+							Spacer()
+						}
+						HStack {
+							Text("Current Usage: \(Int(process.memoryUsage))MB")
+							Spacer()
+						}
+						Button(action: {
+							
+						}, label: {
+							Spacer()
+							Text("Quit Process")
+								.foregroundColor(.red)
+							Spacer()
+						})
+						Button(action: {
+							
+						}, label: {
+							Spacer()
+							Text("Ignore Process Today")
+							Spacer()
+						})
+						Button(action: {
+							
+						}, label: {
+							Spacer()
+							Text("Ignore Process Forever")
+							Spacer()
+						})
+					}.padding()
 				}
 			}
 			Spacer()
+		}
+		.onAppear() {
+			print(processes.count)
 		}
 		.frame(width: 400, height: 400)
 		.padding()
