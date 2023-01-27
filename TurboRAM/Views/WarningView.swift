@@ -23,9 +23,8 @@ struct WarningView: View {
 				}, label: {
 					Text("Done")
 				}).padding(.leading)
-			}
+			}.padding(.bottom)
 			Divider()
-			Spacer()
 			List(processes) { process in
 				ZStack {
 					RoundedRectangle(cornerRadius: 10)

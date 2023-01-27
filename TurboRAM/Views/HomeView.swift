@@ -16,10 +16,11 @@ struct HomeView: View {
 	@State private var rotationAngle: Angle = Angle(degrees: 0)
 	
 	@State private var shouldShowSettingsSheet = false
-	@State private var shouldShowInfoSheet = false
-	
 	@State private var shouldShowWarningSheet = false
+	
 	@State private var offendingProcesses: [ProcessDetails] = []
+	
+	@State private var shouldShowQuitConfirmationAlert = false
 	
 	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
 	
@@ -46,13 +47,7 @@ struct HomeView: View {
 						.buttonStyle(PlainButtonStyle())
 						.padding(.horizontal)
 						Button(action: {
-							if let selectedIndex {
-								memoryInfoViewModel.quitProcessWithPID(pid: selectedIndex)
-								withAnimation {
-									memoryInfoViewModel.processes.remove(at: memoryInfoViewModel.processes.firstIndex(where: {$0.id == selectedIndex})!)
-									self.selectedIndex = nil
-								}
-							}
+							shouldShowQuitConfirmationAlert.toggle()
 						}) {
 							Image(systemName: "x.circle")
 								.resizable()
@@ -63,8 +58,6 @@ struct HomeView: View {
 						.disabled(selectedIndex == nil)
 						.buttonStyle(PlainButtonStyle())
 						.padding(.horizontal)
-					}
-					HStack {
 						Button(action: {
 							withAnimation {
 								shouldShowSettingsSheet.toggle()
@@ -76,19 +69,7 @@ struct HomeView: View {
 								.frame(width: 20)
 						}
 						.buttonStyle(PlainButtonStyle())
-						.padding()
-						Button(action: {
-							withAnimation {
-								shouldShowInfoSheet.toggle()
-							}
-						}) {
-							Image(systemName: "info.circle")
-								.resizable()
-								.aspectRatio(contentMode: .fit)
-								.frame(width: 20)
-						}
-						.buttonStyle(PlainButtonStyle())
-						.padding()
+						.padding(.horizontal)
 					}
 				}
 			}.contentShape(Rectangle()) // Makes the entire area tappable
@@ -98,16 +79,38 @@ struct HomeView: View {
 				TableColumn("Process ID") { Text(String($0.id)) }
 			}
 		}
+		.alert(isPresented: $shouldShowQuitConfirmationAlert) {
+			if let selectedIndex {
+				return Alert(
+					title: Text("Quit this process?"),
+					primaryButton: .destructive(Text("Quit")) {
+						memoryInfoViewModel.quitProcessWithPID(pid: selectedIndex)
+						withAnimation {
+							memoryInfoViewModel.processes.remove(at: memoryInfoViewModel.processes.firstIndex(where: {$0.id == selectedIndex})!)
+							self.selectedIndex = nil
+						}
+					},
+					secondaryButton: .cancel()
+				)
+			} else {
+				return Alert(
+					title: Text("Something went wrong"),
+					message: Text("Couldn't find the selected process. Please refresh and try again.")
+				)
+			}
+		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-//			offendingProcesses = memoryInfoViewModel.processes
-//			shouldShowWarningSheet.toggle()
+			//			offendingProcesses = memoryInfoViewModel.processes
+			//			shouldShowWarningSheet.toggle()
 		}
 		.onReceive(timer) { _ in
+			print("DEBUG: timer RECEIVED")
 			memoryInfoViewModel.reloadMemoryInfo()
 			offendingProcesses = memoryInfoViewModel.findOffendingProcesses()
 			if !offendingProcesses.isEmpty {
 				shouldShowWarningSheet.toggle()
+				print("DEBUG: TOGGLED shouldShowWarningSheet")
 			}
 		}
 		.onTapGesture {
@@ -115,10 +118,7 @@ struct HomeView: View {
 		}
 		.frame(width: 800, height: 800)
 		.sheet(isPresented: $shouldShowSettingsSheet, content: {
-			SettingsView()
-		})
-		.sheet(isPresented: $shouldShowInfoSheet, content: {
-			InfoView()
+			SettingsView(shouldShowSettingsSheet: $shouldShowSettingsSheet)
 		})
 		.sheet(isPresented: $shouldShowWarningSheet, content: {
 			WarningView(processes: offendingProcesses, shouldShowWarningSheet: $shouldShowWarningSheet)

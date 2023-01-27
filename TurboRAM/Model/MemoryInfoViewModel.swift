@@ -127,9 +127,9 @@ class MemoryInfoViewModel: ObservableObject {
 	}
 	
 	func findOffendingProcesses() -> [ProcessDetails] {
-		// Returns all processes that grew memory usage by at least 20% since the first run and are using at least 500MB
-		let commonProcesses: [ProcessDetails] = processes.filter({$0.memoryUsage > 500}).compactMap { process in
-			guard let compared = initialValues[process.id], process.memoryUsage > (compared * 1.2) else { return nil }
+		// Returns all processes that grew memory usage by at least 50% since the first run and are using at least 500MB
+		let commonProcesses: [ProcessDetails] = processes.filter({$0.memoryUsage >= 500}).compactMap { process in
+			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * 1.5) else { return nil }
 			return process
 		}
 		
@@ -140,7 +140,10 @@ class MemoryInfoViewModel: ObservableObject {
 		let task = Process()
 		let pipe = Pipe()
 		
-		//		kill requires breaking sandbox
+		/* kill requires breaking the sandbox.
+		 killall does not, but requires the process name instead of PID.
+		 */
+		
 		//		task.launchPath = "/bin/kill"
 		//		task.arguments = [String(pid)]
 		//		task.standardOutput = pipe
