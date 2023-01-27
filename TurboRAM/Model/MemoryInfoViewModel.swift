@@ -13,7 +13,7 @@ class MemoryInfoViewModel: ObservableObject {
 	var initialValues: [Int : Float] = [:] // Dictionary allows for 0(1) lookup time instead of 0(n)
 	
 	@Published var processes: [ProcessDetails] = []
-
+	
 	func reloadMemoryInfo() {
 		let task = Process()
 		let pipe = Pipe()
@@ -134,5 +134,40 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 		
 		return commonProcesses
+	}
+	
+	func quitProcessWithPID(pid: Int) {
+		let task = Process()
+		let pipe = Pipe()
+		
+		//		kill requires breaking sandbox
+		//		task.launchPath = "/bin/kill"
+		//		task.arguments = [String(pid)]
+		//		task.standardOutput = pipe
+		
+		// Get process name by PID
+		task.launchPath = "/bin/bash"
+		task.arguments = ["-c", "ps -p \(pid) -o comm= | awk -F/ '{print $NF}'"]
+		
+		task.standardOutput = pipe
+		task.launch()
+		
+		let data = pipe.fileHandleForReading.readDataToEndOfFile()
+		if let processName = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .newlines) {
+			kill(processName: processName)
+		}
+		
+		func kill(processName: String) {
+			let task = Process()
+			let pipe = Pipe()
+			
+			task.launchPath = "/usr/bin/killall"
+			task.arguments = [processName]
+			task.standardOutput = pipe
+			
+			try? task.run()
+		}
+		
+		try? task.run()
 	}
 }

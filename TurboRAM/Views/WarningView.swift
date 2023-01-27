@@ -11,13 +11,15 @@ struct WarningView: View {
 	
 	let processes: [ProcessDetails]
 	
+	@Binding var shouldShowWarningSheet: Bool
+	
 	var body: some View {
 		VStack {
 			HStack {
-				Text("These processes have seen a significant increase in memory usage of over 20% from the time they were first tracked.")
+				Text("These processes have seen a significant increase in memory usage of over 20% from the time they were first tracked and are now using 500MB of memory or more.")
 				Spacer()
 				Button(action: {
-					
+					shouldShowWarningSheet.toggle()
 				}, label: {
 					Text("Done")
 				}).padding(.leading)
@@ -32,18 +34,16 @@ struct WarningView: View {
 						HStack {
 							Text(process.processName)
 							Spacer()
-						}
-						HStack {
 							Text("Current Usage: \(Int(process.memoryUsage))MB")
-							Spacer()
 						}
 						Button(action: {
-							
+//							quitProcessWithPID(process.id)
 						}, label: {
-							Spacer()
-							Text("Quit Process")
-								.foregroundColor(.red)
-							Spacer()
+							HStack {
+								Spacer()
+								Text("Quit Process")
+								Spacer()
+							}
 						})
 						Button(action: {
 							

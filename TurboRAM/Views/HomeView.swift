@@ -46,8 +46,12 @@ struct HomeView: View {
 						.buttonStyle(PlainButtonStyle())
 						.padding(.horizontal)
 						Button(action: {
-							withAnimation {
-								
+							if let selectedIndex {
+								memoryInfoViewModel.quitProcessWithPID(pid: selectedIndex)
+								withAnimation {
+									memoryInfoViewModel.processes.remove(at: memoryInfoViewModel.processes.firstIndex(where: {$0.id == selectedIndex})!)
+									self.selectedIndex = nil
+								}
 							}
 						}) {
 							Image(systemName: "x.circle")
@@ -96,8 +100,8 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-			offendingProcesses = memoryInfoViewModel.processes
-			shouldShowWarningSheet.toggle()
+//			offendingProcesses = memoryInfoViewModel.processes
+//			shouldShowWarningSheet.toggle()
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()
@@ -117,7 +121,7 @@ struct HomeView: View {
 			InfoView()
 		})
 		.sheet(isPresented: $shouldShowWarningSheet, content: {
-			WarningView(processes: offendingProcesses)
+			WarningView(processes: offendingProcesses, shouldShowWarningSheet: $shouldShowWarningSheet)
 		})
 		.padding()
 		.fixedSize(horizontal: true, vertical: false)
