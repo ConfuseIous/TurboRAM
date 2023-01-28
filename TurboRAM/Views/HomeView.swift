@@ -21,8 +21,6 @@ struct HomeView: View {
 	@State private var shouldShowSettingsSheet = false
 	@State private var shouldShowWarningSheet = false
 	
-	@State private var offendingProcesses: [ProcessDetails] = []
-	
 	@State private var shouldShowQuitConfirmationAlert = false
 	
 	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
@@ -45,7 +43,7 @@ struct HomeView: View {
 						Spacer()
 					}
 					HStack {
-						Text("TurboRAM will alert you if any of process uses \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times more memory from when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
+						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times more memory from when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
 							.font(.system(size: 12))
 							.foregroundColor(.secondary)
 						Spacer()
@@ -125,8 +123,8 @@ struct HomeView: View {
 		.onReceive(timer) { _ in
 			print("DEBUG: timer RECEIVED")
 			memoryInfoViewModel.reloadMemoryInfo()
-			offendingProcesses = memoryInfoViewModel.findOffendingProcesses()
-			if !offendingProcesses.isEmpty {
+			memoryInfoViewModel.findOffendingProcesses()
+			if !memoryInfoViewModel.offendingProcesses.isEmpty {
 				shouldShowWarningSheet.toggle()
 				print("DEBUG: TOGGLED shouldShowWarningSheet")
 			}
@@ -139,7 +137,7 @@ struct HomeView: View {
 			SettingsView(shouldShowSettingsSheet: $shouldShowSettingsSheet)
 		})
 		.sheet(isPresented: $shouldShowWarningSheet, content: {
-			WarningView(processes: offendingProcesses, shouldShowWarningSheet: $shouldShowWarningSheet)
+			WarningView(shouldShowWarningSheet: $shouldShowWarningSheet)
 		})
 		.padding()
 		.fixedSize(horizontal: true, vertical: false)

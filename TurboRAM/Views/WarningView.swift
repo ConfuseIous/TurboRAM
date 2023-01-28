@@ -9,14 +9,25 @@ import SwiftUI
 
 struct WarningView: View {
 	
-	let processes: [ProcessDetails]
+	@AppStorage("minimumMemoryUsageminimumMultiplier") private var minimumMemoryUsageminimumMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageminimumMultiplier")
+	@AppStorage("minimumMemoryUsageThreshold") private var minimumMemoryUsageThreshold = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
 	
 	@Binding var shouldShowWarningSheet: Bool
+	
+	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
+	
+	let formatter: NumberFormatter = {
+		let formatter = NumberFormatter()
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		
+		return formatter
+	}()
 	
 	var body: some View {
 		VStack {
 			HStack {
-				Text("These processes have seen a significant increase in memory usage of over 20% from the time they were first tracked and are now using 500MB of memory or more.")
+				Text("These processes have seen a significant increase in memory usage of over \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times the usage when they were first tracked and are now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
 				Spacer()
 				Button(action: {
 					shouldShowWarningSheet.toggle()
@@ -25,7 +36,7 @@ struct WarningView: View {
 				}).padding(.leading)
 			}.padding(.bottom)
 			Divider()
-			List(processes) { process in
+			List(memoryInfoViewModel.offendingProcesses) { process in
 				ZStack {
 					RoundedRectangle(cornerRadius: 10)
 						.foregroundColor(Color(nsColor: .windowBackgroundColor))
@@ -36,7 +47,7 @@ struct WarningView: View {
 							Text("Current Usage: \(Int(process.memoryUsage))MB")
 						}
 						Button(action: {
-//							quitProcessWithPID(process.id)
+							memoryInfoViewModel.quitProcessWithPID(pid: process.id)
 						}, label: {
 							HStack {
 								Spacer()
@@ -62,9 +73,6 @@ struct WarningView: View {
 				}
 			}
 			Spacer()
-		}
-		.onAppear() {
-			print(processes.count)
 		}
 		.frame(width: 400, height: 400)
 		.padding()

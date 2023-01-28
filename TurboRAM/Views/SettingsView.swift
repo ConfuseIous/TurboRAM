@@ -28,7 +28,7 @@ struct SettingsView: View {
 				}).padding(.leading)
 			}.padding(.bottom)
 			Divider()
-			Text("TurboRAM will alert you if any of process uses \(minimumMultiplier) times more memory from when it was first tracked and is now using \(threshold)MB of memory or more.")
+			Text("TurboRAM will alert you if any process uses \(minimumMultiplier) times more memory from when it was first tracked and is now using \(threshold)MB of memory or more.")
 				.font(.system(size: 12))
 				.foregroundColor(.secondary)
 			VStack {
@@ -85,7 +85,7 @@ struct SettingsView: View {
 		}
 		.alert(isPresented: $shouldShowConfirmationAlert) {
 			Alert(
-				title: Text("These values appear to be irregular. Are you sure you want to save them?"),
+				title: Text("These values appear to be unusual. Are you sure you want to save them?"),
 				primaryButton: .destructive(Text("Yes")) {
 					if let thresholdFloat = Float(threshold) {
 						UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")

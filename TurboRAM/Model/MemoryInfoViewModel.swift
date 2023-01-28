@@ -13,6 +13,7 @@ class MemoryInfoViewModel: ObservableObject {
 	var initialValues: [Int : Float] = [:] // Dictionary allows for 0(1) lookup time instead of 0(n)
 	
 	@Published var processes: [ProcessDetails] = []
+	@Published var offendingProcesses: [ProcessDetails] = []
 	
 	func reloadMemoryInfo() {
 		let task = Process()
@@ -126,14 +127,14 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	func findOffendingProcesses() -> [ProcessDetails] {
+	func findOffendingProcesses() {
 		// Returns all processes that grew memory usage by at least 50% since the first run and are using at least 500MB
 		let commonProcesses: [ProcessDetails] = processes.filter({$0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold")}).compactMap { process in
 			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier")) else { return nil }
 			return process
 		}
 		
-		return commonProcesses
+		self.offendingProcesses = commonProcesses
 	}
 	
 	func quitProcessWithPID(pid: Int) {
