@@ -27,50 +27,59 @@ struct HomeView: View {
 	var body: some View {
 		VStack {
 			HStack {
-				Text("TurboRAM")
-					.font(.title)
-				Spacer()
 				VStack {
 					HStack {
-						Button(action: {
-							withAnimation {
-								rotationAngle += Angle(degrees: 360)
-								memoryInfoViewModel.reloadMemoryInfo()
-							}
-						}) {
-							Image(systemName: "arrow.clockwise.circle")
-								.resizable()
-								.aspectRatio(contentMode: .fit)
-								.rotationEffect(rotationAngle)
-								.frame(width: 20)
-						}
-						.buttonStyle(PlainButtonStyle())
-						.padding(.horizontal)
-						Button(action: {
-							shouldShowQuitConfirmationAlert.toggle()
-						}) {
-							Image(systemName: "x.circle")
-								.resizable()
-								.aspectRatio(contentMode: .fit)
-								.frame(width: 20)
-								.foregroundColor(selectedIndex == nil ? .primary : .red)
-						}
-						.disabled(selectedIndex == nil)
-						.buttonStyle(PlainButtonStyle())
-						.padding(.horizontal)
-						Button(action: {
-							withAnimation {
-								shouldShowSettingsSheet.toggle()
-							}
-						}) {
-							Image(systemName: "gear.circle")
-								.resizable()
-								.aspectRatio(contentMode: .fit)
-								.frame(width: 20)
-						}
-						.buttonStyle(PlainButtonStyle())
-						.padding(.horizontal)
+						Text("TurboRAM")
+							.font(.title)
+						Spacer()
 					}
+					HStack {
+						Text("TurboRAM will alert you if any of process uses \(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold")) times more memory from when it was first tracked and is now using \(UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier"))MB of memory or more.")
+							.font(.system(size: 12))
+							.foregroundColor(.secondary)
+						Spacer()
+					}.padding(.top, 5)
+				}
+				Spacer()
+				HStack {
+					Button(action: {
+						withAnimation {
+							rotationAngle += Angle(degrees: 360)
+							memoryInfoViewModel.reloadMemoryInfo()
+						}
+					}) {
+						Image(systemName: "arrow.clockwise.circle")
+							.resizable()
+							.aspectRatio(contentMode: .fit)
+							.rotationEffect(rotationAngle)
+							.frame(width: 20)
+					}
+					.buttonStyle(PlainButtonStyle())
+					.padding(.horizontal)
+					Button(action: {
+						shouldShowQuitConfirmationAlert.toggle()
+					}) {
+						Image(systemName: "x.circle")
+							.resizable()
+							.aspectRatio(contentMode: .fit)
+							.frame(width: 20)
+							.foregroundColor(selectedIndex == nil ? .primary : .red)
+					}
+					.disabled(selectedIndex == nil)
+					.buttonStyle(PlainButtonStyle())
+					.padding(.horizontal)
+					Button(action: {
+						withAnimation {
+							shouldShowSettingsSheet.toggle()
+						}
+					}) {
+						Image(systemName: "gear.circle")
+							.resizable()
+							.aspectRatio(contentMode: .fit)
+							.frame(width: 20)
+					}
+					.buttonStyle(PlainButtonStyle())
+					.padding(.horizontal)
 				}
 			}.contentShape(Rectangle()) // Makes the entire area tappable
 			Table(memoryInfoViewModel.processes, selection: $selectedIndex) {
