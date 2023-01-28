@@ -126,14 +126,51 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	func compareMemoryUsageToOriginal() -> [ProcessDetails] {
-		// Returns all processes that grew memory usage by at least 20% since the first run
-		let commonProcesses: [ProcessDetails] = processes.compactMap { process in
-			guard let compared = initialValues[process.id], process.memoryUsage > (compared * 1.2) else { return nil }
+	func findOffendingProcesses() -> [ProcessDetails] {
+		// Returns all processes that grew memory usage by at least 50% since the first run and are using at least 500MB
+		let commonProcesses: [ProcessDetails] = processes.filter({$0.memoryUsage >= 500}).compactMap { process in
+			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * 1.5) else { return nil }
 			return process
 		}
 		
 		return commonProcesses
 	}
+	
+	func quitProcessWithPID(pid: Int) {
+		let task = Process()
+		let pipe = Pipe()
+		
+		/* kill requires breaking the sandbox.
+		 killall does not, but requires the process name instead of PID.
+		 */
+		
+		//		task.launchPath = "/bin/kill"
+		//		task.arguments = [String(pid)]
+		//		task.standardOutput = pipe
+		
+		// Get process name by PID
+		task.launchPath = "/bin/bash"
+		task.arguments = ["-c", "ps -p \(pid) -o comm= | awk -F/ '{print $NF}'"]
+		
+		task.standardOutput = pipe
+		task.launch()
+		
+		let data = pipe.fileHandleForReading.readDataToEndOfFile()
+		if let processName = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .newlines) {
+			kill(processName: processName)
+		}
+		
+		func kill(processName: String) {
+			let task = Process()
+			let pipe = Pipe()
+			
+			task.launchPath = "/usr/bin/killall"
+			task.arguments = [processName]
+			task.standardOutput = pipe
+			
+			try? task.run()
+		}
+		
+		try? task.run()
+	}
 }
-

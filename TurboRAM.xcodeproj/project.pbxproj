@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C0D8D4A2982C27B00EBADE9 /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D8D492982C27B00EBADE9 /* WarningView.swift */; };
 		3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5B8FD92929551F004AC381 /* ProcessDetails.swift */; };
 		3C60D4F52921ED1200283F91 /* MemoryInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60D4F42921ED1200283F91 /* MemoryInfoViewModel.swift */; };
 		3CA351912939A7E900E3735C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA351902939A7E900E3735C /* SettingsView.swift */; };
-		3CA351932939A80200E3735C /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA351922939A80200E3735C /* InfoView.swift */; };
 		3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */; };
 		3CD43272291FB9FF0020B7FB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD43271291FB9FF0020B7FB /* HomeView.swift */; };
 		3CD43274291FBA000020B7FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CD43273291FBA000020B7FB /* Assets.xcassets */; };
@@ -18,10 +18,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C0D8D492982C27B00EBADE9 /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		3C5B8FD92929551F004AC381 /* ProcessDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessDetails.swift; sourceTree = "<group>"; };
 		3C60D4F42921ED1200283F91 /* MemoryInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryInfoViewModel.swift; sourceTree = "<group>"; };
 		3CA351902939A7E900E3735C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		3CA351922939A80200E3735C /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		3CD4326C291FB9FF0020B7FB /* TurboRAM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TurboRAM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboRAMApp.swift; sourceTree = "<group>"; };
 		3CD43271291FB9FF0020B7FB /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -54,7 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				3CD43271291FB9FF0020B7FB /* HomeView.swift */,
-				3CA351922939A80200E3735C /* InfoView.swift */,
+				3C0D8D492982C27B00EBADE9 /* WarningView.swift */,
 				3CA351902939A7E900E3735C /* SettingsView.swift */,
 			);
 			path = Views;
@@ -113,6 +113,8 @@
 			dependencies = (
 			);
 			name = TurboRAM;
+			packageProductDependencies = (
+			);
 			productName = TurboRAM;
 			productReference = 3CD4326C291FB9FF0020B7FB /* TurboRAM.app */;
 			productType = "com.apple.product-type.application";
@@ -141,6 +143,8 @@
 				Base,
 			);
 			mainGroup = 3CD43263291FB9FF0020B7FB;
+			packageReferences = (
+			);
 			productRefGroup = 3CD4326D291FB9FF0020B7FB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -171,7 +175,7 @@
 				3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */,
 				3CD43272291FB9FF0020B7FB /* HomeView.swift in Sources */,
 				3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */,
-				3CA351932939A80200E3735C /* InfoView.swift in Sources */,
+				3C0D8D4A2982C27B00EBADE9 /* WarningView.swift in Sources */,
 				3C60D4F52921ED1200283F91 /* MemoryInfoViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
