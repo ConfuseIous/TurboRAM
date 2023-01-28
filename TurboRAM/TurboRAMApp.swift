@@ -28,5 +28,10 @@ struct TurboRAMApp: App {
 					window?.level = .floating
 				}
 		}.windowResizability(.contentSize)
+//		MenuBarExtra(content: {
+//			MenuBarView()
+//		}, label: {
+//			Image(systemName: "cpu")
+//		})
 	}
 }

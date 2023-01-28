@@ -11,6 +11,9 @@ struct HomeView: View {
 	
 	let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // Check every minute
 	
+	@AppStorage("minimumMemoryUsageminimumMultiplier") private var minimumMemoryUsageminimumMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageminimumMultiplier")
+	@AppStorage("minimumMemoryUsageThreshold") private var minimumMemoryUsageThreshold = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
+	
 	@State private var selectedIndex: Int?
 	
 	@State private var rotationAngle: Angle = Angle(degrees: 0)
@@ -24,6 +27,14 @@ struct HomeView: View {
 	
 	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
 	
+	let formatter: NumberFormatter = {
+		let formatter = NumberFormatter()
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		
+		return formatter
+	}()
+	
 	var body: some View {
 		VStack {
 			HStack {
@@ -34,7 +45,7 @@ struct HomeView: View {
 						Spacer()
 					}
 					HStack {
-						Text("TurboRAM will alert you if any of process uses \(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold")) times more memory from when it was first tracked and is now using \(UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier"))MB of memory or more.")
+						Text("TurboRAM will alert you if any of process uses \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times more memory from when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
 							.font(.system(size: 12))
 							.foregroundColor(.secondary)
 						Spacer()
@@ -110,8 +121,6 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-			//			offendingProcesses = memoryInfoViewModel.processes
-			//			shouldShowWarningSheet.toggle()
 		}
 		.onReceive(timer) { _ in
 			print("DEBUG: timer RECEIVED")
