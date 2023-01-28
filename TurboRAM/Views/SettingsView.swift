@@ -12,8 +12,8 @@ struct SettingsView: View {
 	@State private var shouldShowConfirmationAlert: Bool = false
 	@Binding var shouldShowSettingsSheet: Bool
 	
-	@State private var threshold: String = String(UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold"))
-	@State private var minimumMultiplier: String = String(UserDefaults.standard.double(forKey: "minimumMemoryUsageminimumMultiplier"))
+	@State private var threshold: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
+	@State private var minimumMultiplier: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier"))
 	
 	var body: some View {
 		VStack {
@@ -59,19 +59,19 @@ struct SettingsView: View {
 			Spacer()
 			Button(action: {
 				let acceptableThresholdRange = 200.0...1000.0
-				guard let thresholdDouble = Double(threshold), acceptableThresholdRange.contains(thresholdDouble) else {
+				guard let thresholdFloat = Float(threshold), acceptableThresholdRange.contains(Double(thresholdFloat)) else {
 					shouldShowConfirmationAlert.toggle()
 					return
 				}
 				
 				let acceptableMultiplierRange = 1.2...2
-				guard let minimumMultiplierDouble = Double(minimumMultiplier), acceptableMultiplierRange.contains(minimumMultiplierDouble) else {
+				guard let minimumMultiplierFloat = Float(minimumMultiplier), acceptableMultiplierRange.contains(Double(minimumMultiplierFloat)) else {
 					shouldShowConfirmationAlert.toggle()
 					return
 				}
 				
-				UserDefaults.standard.set(thresholdDouble, forKey: "minimumMemoryUsageThreshold")
-				UserDefaults.standard.set(minimumMultiplierDouble, forKey: "minimumMemoryUsageminimumMultiplier")
+				UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
+				UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageminimumMultiplier")
 				
 				shouldShowSettingsSheet.toggle()
 			}, label: {
@@ -84,11 +84,11 @@ struct SettingsView: View {
 			Alert(
 				title: Text("These values appear to be irregular. Are you sure you want to save them?"),
 				primaryButton: .destructive(Text("Yes")) {
-					if let thresholdDouble = Double(threshold) {
-						UserDefaults.standard.set(thresholdDouble, forKey: "minimumMemoryUsageThreshold")
+					if let thresholdFloat = Float(threshold) {
+						UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
 					}
-					if let minimumMultiplierDouble = Double(minimumMultiplier) {
-						UserDefaults.standard.set(minimumMultiplierDouble, forKey: "minimumMemoryUsageminimumMultiplier")
+					if let minimumMultiplierFloat = Float(minimumMultiplier) {
+						UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageminimumMultiplier")
 					}
 					
 					shouldShowSettingsSheet.toggle()
