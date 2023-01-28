@@ -121,8 +121,6 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-			//			offendingProcesses = memoryInfoViewModel.processes
-			//			shouldShowWarningSheet.toggle()
 		}
 		.onReceive(timer) { _ in
 			print("DEBUG: timer RECEIVED")
