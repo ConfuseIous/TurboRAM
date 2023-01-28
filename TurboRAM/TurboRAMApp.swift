@@ -28,5 +28,6 @@ struct TurboRAMApp: App {
 					window?.level = .floating
 				}
 		}.windowResizability(.contentSize)
+		
 	}
 }
