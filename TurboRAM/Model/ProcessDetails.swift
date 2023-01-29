@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProcessDetails: Identifiable {
+struct ProcessDetails: Identifiable, Equatable {
 	// id represents PID
 	var id: Int
 	var processName: String

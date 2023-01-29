@@ -14,6 +14,12 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	@Published var processes: [ProcessDetails] = []
 	@Published var offendingProcesses: [ProcessDetails] = []
+	@Published var ignoredProcessIDs: [Int] = (UserDefaults.standard.array(forKey: "ignoredProcessIDs") as? [Int] ?? [])
+	
+	init() {
+		reloadMemoryInfo()
+		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
+	}
 	
 	func reloadMemoryInfo() {
 		let task = Process()
@@ -179,5 +185,18 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 		
 		try? task.run()
+	}
+	
+	func getPermanentlyIgnoredProcessIDs() -> [Int] {
+		var ignoredProcessIDs: [Int] = []
+		
+		let ignoredProcessNames = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
+		for name in ignoredProcessNames {
+			if let process = processes.first(where: {$0.processName == name}) {
+				ignoredProcessIDs.append(process.id)
+			}
+		}
+		
+		return ignoredProcessIDs
 	}
 }

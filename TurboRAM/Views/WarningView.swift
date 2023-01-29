@@ -36,40 +36,54 @@ struct WarningView: View {
 				}).padding(.leading)
 			}.padding(.bottom)
 			Divider()
-			List(memoryInfoViewModel.offendingProcesses) { process in
-				ZStack {
-					RoundedRectangle(cornerRadius: 10)
-						.foregroundColor(Color(nsColor: .windowBackgroundColor))
-					VStack {
-						HStack {
-							Text(process.processName)
-							Spacer()
-							Text("Current Usage: \(Int(process.memoryUsage))MB")
-						}
-						Button(action: {
-							memoryInfoViewModel.quitProcessWithPID(pid: process.id)
-						}, label: {
+			if memoryInfoViewModel.offendingProcesses.isEmpty {
+				Spacer()
+				Text("No Processes")
+					.font(.system(size: 25))
+					.foregroundColor(.secondary)
+			} else {
+				List(memoryInfoViewModel.offendingProcesses) { process in
+					ZStack {
+						RoundedRectangle(cornerRadius: 10)
+							.foregroundColor(Color(nsColor: .windowBackgroundColor))
+						VStack {
 							HStack {
+								Text(process.processName)
 								Spacer()
-								Text("Quit Process")
-								Spacer()
+								Text("Current Usage: \(Int(process.memoryUsage))MB")
 							}
-						})
-						Button(action: {
-							
-						}, label: {
-							Spacer()
-							Text("Ignore Process Today")
-							Spacer()
-						})
-						Button(action: {
-							
-						}, label: {
-							Spacer()
-							Text("Ignore Process Forever")
-							Spacer()
-						})
-					}.padding()
+							Button(action: {
+								if let index = memoryInfoViewModel.offendingProcesses.firstIndex(where: {$0.id == process.id}) {
+									memoryInfoViewModel.quitProcessWithPID(pid: process.id)
+									memoryInfoViewModel.offendingProcesses.remove(at: index)
+									memoryInfoViewModel.reloadMemoryInfo()
+								}
+							}, label: {
+								HStack {
+									Spacer()
+									Text("Quit Process")
+									Spacer()
+								}
+							})
+							//						Button(action: {
+							//							memoryInfoViewModel.ignoredProcessIDs.append(process.id)
+							//						}, label: {
+							//							Spacer()
+							//							Text("Ignore Process Today")
+							//							Spacer()
+							//						})
+							Button(action: {
+								memoryInfoViewModel.ignoredProcessIDs.append(process.id)
+								var ignoredProcessNames: [String] = (UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? [])
+								ignoredProcessNames.append(process.processName)
+								UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
+							}, label: {
+								Spacer()
+								Text("Ignore Process Forever")
+								Spacer()
+							})
+						}.padding()
+					}
 				}
 			}
 			Spacer()
