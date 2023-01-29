@@ -14,7 +14,7 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	@Published var processes: [ProcessDetails] = []
 	@Published var offendingProcesses: [ProcessDetails] = []
-	@Published var ignoredProcessIDs: [Int] = (UserDefaults.standard.array(forKey: "ignoredProcessIDs") as? [Int] ?? [])
+	@Published var ignoredProcessIDs: [Int] = []
 	
 	init() {
 		reloadMemoryInfo()

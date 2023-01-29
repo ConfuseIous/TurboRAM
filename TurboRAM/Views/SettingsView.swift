@@ -28,9 +28,9 @@ struct SettingsView: View {
 				}).padding(.leading)
 			}.padding(.bottom)
 			Divider()
-			Text("TurboRAM will alert you if any process uses \(minimumMultiplier) times more memory from when it was first tracked and is now using \(threshold)MB of memory or more.")
-				.font(.system(size: 12))
-				.foregroundColor(.secondary)
+			//			Text("TurboRAM will alert you if any process uses \(minimumMultiplier) times more memory from when it was first tracked and is now using \(threshold)MB of memory or more.")
+			//				.font(.system(size: 12))
+			//				.foregroundColor(.secondary)
 			VStack {
 				HStack {
 					Text("Ignore processes that use less than:")
@@ -58,6 +58,7 @@ struct SettingsView: View {
 			}.padding(.bottom)
 			InfoView()
 			ContactView()
+			IgnoredView()
 			Spacer()
 			Button(action: {
 				let acceptableThresholdRange = 200.0...1000.0
@@ -137,8 +138,9 @@ struct SettingsView: View {
 							Spacer()
 						}.padding(.top, 5)
 					}
-				}.padding()
-			}.frame(height: shouldExpand ? nil : 50)
+				}
+				.padding()
+			}.frame(height: shouldExpand ? nil : 45)
 		}
 	}
 	
@@ -200,7 +202,61 @@ struct SettingsView: View {
 						}
 					}
 				}.padding()
-			}.frame(height: shouldExpand ? 100 : 50)
+			}.frame(height: shouldExpand ? 100 : 45)
+		}
+	}
+	
+	struct IgnoredView: View {
+		
+		@State private var shouldExpand = false
+		
+		@State private var ignoredProcessNames: [String] = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
+		
+		var body: some View {
+			ZStack {
+				RoundedRectangle(cornerRadius: 10)
+					.foregroundColor(Color(nsColor: .windowBackgroundColor))
+				VStack {
+					Button(action: {
+						withAnimation {
+							shouldExpand.toggle()
+						}
+					}, label: {
+						HStack {
+							Text("IGNORED PROCESSES")
+								.fontWeight(.bold)
+							Spacer()
+							Image(systemName: "chevron.right")
+								.rotationEffect(shouldExpand ? Angle(degrees: 90) : Angle(degrees: 0))
+						}
+					}).buttonStyle(.borderless)
+					Divider()
+					if shouldExpand {
+						if ignoredProcessNames.isEmpty {
+							Text("No Processes")
+								.font(.system(size: 25))
+								.foregroundColor(.secondary)
+						} else {
+							List(ignoredProcessNames, id: \.self) { name in
+								HStack {
+									Text(name)
+									Spacer()
+									Button(action: {
+										if let index = ignoredProcessNames.firstIndex(where: {$0 == name}) {
+											withAnimation {
+												ignoredProcessNames.remove(at: index)
+												UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
+											}
+										}
+									}, label: {
+										Text("Unignore")
+									})
+								}
+							}.listStyle(InsetListStyle())
+						}
+					}
+				}.padding()
+			}.frame(height: shouldExpand ? nil : 45)
 		}
 	}
 }

@@ -73,10 +73,17 @@ struct WarningView: View {
 							//							Spacer()
 							//						})
 							Button(action: {
-								memoryInfoViewModel.ignoredProcessIDs.append(process.id)
-								var ignoredProcessNames: [String] = (UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? [])
-								ignoredProcessNames.append(process.processName)
-								UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
+								if let index = memoryInfoViewModel.offendingProcesses.firstIndex(where: {$0.id == process.id}) {
+									memoryInfoViewModel.ignoredProcessIDs.append(process.id)
+									var ignoredProcessNames: [String] = (UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? [])
+									ignoredProcessNames.append(process.processName)
+									UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
+									
+									withAnimation {
+										memoryInfoViewModel.offendingProcesses.remove(at: index)
+										memoryInfoViewModel.reloadMemoryInfo()
+									}
+								}
 							}, label: {
 								Spacer()
 								Text("Ignore Process Forever")
