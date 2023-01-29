@@ -111,20 +111,25 @@ class MemoryInfoViewModel: ObservableObject {
 			}
 		}
 		
-		var sum = Float(0)
-		for process in processes {
-			sum += process.memoryUsage
-		}
+//		var sum = Float(0)
+//		for process in processes {
+//			sum += process.memoryUsage
+//		}
 		
 		//		print("TOTAL RAM USED:", sum)
 		
-		if initialValues.isEmpty {
-			self.initialValues = processes.reduce(into: [Int: Float]()) {
-				$0[$1.id] = $1.memoryUsage
-			}
-			
-			self.processes = processes
-		}
+		self.initialValues.merge(processes.reduce(into: [Int: Float]()) {
+			$0[$1.id] = $1.memoryUsage
+		}, uniquingKeysWith: { (current, _) in current })
+		
+		/*
+		 { (current, _) in current } is a closure that is passed as an argument to the merge method of the dictionary. The merge method takes a closure that defines how to merge the values of duplicate keys.
+		 In this case, the closure takes two arguments, current and _, where current is the current value of the key in the initialValues dictionary and _ is the value of the key from the newProcesses dictionary.
+		 The closure just returns the current value, which means that if there is a duplicate key in the newProcesses dictionary, the value of that key in the initialValues dictionary will be retained and the value in the newProcesses dictionary will be ignored.
+		 It's an inline way of telling the function to keep the current value if there's a duplicate key.
+		 */
+		
+		self.processes = processes
 	}
 	
 	func findOffendingProcesses() {
@@ -135,6 +140,7 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 		
 		self.offendingProcesses = commonProcesses
+		print("FOUND \(self.offendingProcesses.count) OFFENDING PROCESSES")
 	}
 	
 	func quitProcessWithPID(pid: Int) {
