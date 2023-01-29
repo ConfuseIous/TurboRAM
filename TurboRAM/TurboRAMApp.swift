@@ -20,7 +20,8 @@ struct TurboRAMApp: App {
 	}
 	
 	var body: some Scene {
-		WindowGroup {
+		//		if #available(macOS 13.0, *) {
+		return WindowGroup {
 			HomeView()
 				.environmentObject(MemoryInfoViewModel())
 				.onAppear {
@@ -28,10 +29,20 @@ struct TurboRAMApp: App {
 					window?.level = .floating
 				}
 		}.windowResizability(.contentSize)
-//		MenuBarExtra(content: {
-//			MenuBarView()
-//		}, label: {
-//			Image(systemName: "cpu")
-//		})
+		//		} else {
+		//			return WindowGroup {
+		//				HomeView()
+		//					.environmentObject(MemoryInfoViewModel())
+		//					.onAppear {
+		//						let window = NSApp.windows.first
+		//						window?.level = .floating
+		//					}
+		//			}
+		//		}
+		//		MenuBarExtra(content: {
+		//			MenuBarView()
+		//		}, label: {
+		//			Image(systemName: "cpu")
+		//		})
 	}
 }

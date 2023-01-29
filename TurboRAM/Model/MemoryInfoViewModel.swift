@@ -14,6 +14,12 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	@Published var processes: [ProcessDetails] = []
 	@Published var offendingProcesses: [ProcessDetails] = []
+	@Published var ignoredProcessIDs: [Int] = []
+	
+	init() {
+		reloadMemoryInfo()
+		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
+	}
 	
 	func reloadMemoryInfo() {
 		let task = Process()
@@ -134,7 +140,10 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	func findOffendingProcesses() {
 		// Returns all processes that grew memory usage by at least 50% since the first run and are using at least 500MB
-		let commonProcesses: [ProcessDetails] = processes.filter({$0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold")}).compactMap { process in
+		let commonProcesses: [ProcessDetails] = processes.filter({
+			let proc = $0
+			return (!ignoredProcessIDs.contains(where: {$0 == proc.id}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
+		}).compactMap { process in
 			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier")) else { return nil }
 			return process
 		}
@@ -179,5 +188,18 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 		
 		try? task.run()
+	}
+	
+	func getPermanentlyIgnoredProcessIDs() -> [Int] {
+		var ignoredProcessIDs: [Int] = []
+		
+		let ignoredProcessNames = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
+		for name in ignoredProcessNames {
+			if let process = processes.first(where: {$0.processName == name}) {
+				ignoredProcessIDs.append(process.id)
+			}
+		}
+		
+		return ignoredProcessIDs
 	}
 }
