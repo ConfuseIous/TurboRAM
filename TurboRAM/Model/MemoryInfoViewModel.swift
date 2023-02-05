@@ -23,7 +23,7 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	func reloadMemoryInfo() {
 		// Create new thread to run script
-		DispatchQueue.global(qos: .userInitiated).async  {
+		DispatchQueue.global(qos: .userInitiated).async {
 			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
 			let shellScript = path + "/script.sh"
 			
@@ -116,7 +116,7 @@ class MemoryInfoViewModel: ObservableObject {
 				//		}
 				
 				//		print("TOTAL RAM USED:", sum)
-				
+  
 				self.initialValues.merge(processes.reduce(into: [Int: Float]()) {
 					$0[$1.id] = $1.memoryUsage
 				}, uniquingKeysWith: { (current, _) in current })
@@ -128,7 +128,9 @@ class MemoryInfoViewModel: ObservableObject {
 				 It's an inline way of telling the function to keep the current value if there's a duplicate key.
 				 */
 				
-				self.processes = processes
+				DispatchQueue.main.async {
+					self.processes = processes
+				}
 			}
 		}
 	}
