@@ -10,6 +10,8 @@
 		3C0D8D4A2982C27B00EBADE9 /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D8D492982C27B00EBADE9 /* WarningView.swift */; };
 		3C2AB9D6298FB04900BC90B9 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D5298FB04900BC90B9 /* SetupView.swift */; };
 		3C2AB9DA298FB89B00BC90B9 /* script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D9298FB89B00BC90B9 /* script.sh */; };
+		3C2AB9DD298FD90800BC90B9 /* FinishSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */; };
+		3C2AB9DF298FE0E500BC90B9 /* SetupContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */; };
 		3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5B8FD92929551F004AC381 /* ProcessDetails.swift */; };
 		3C60D4F52921ED1200283F91 /* MemoryInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60D4F42921ED1200283F91 /* MemoryInfoViewModel.swift */; };
 		3CA351912939A7E900E3735C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA351902939A7E900E3735C /* SettingsView.swift */; };
@@ -24,6 +26,8 @@
 		3C0D8D492982C27B00EBADE9 /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		3C2AB9D5298FB04900BC90B9 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
 		3C2AB9D9298FB89B00BC90B9 /* script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = script.sh; sourceTree = SOURCE_ROOT; };
+		3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishSetupView.swift; sourceTree = "<group>"; };
+		3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupContainer.swift; sourceTree = "<group>"; };
 		3C5B8FD92929551F004AC381 /* ProcessDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessDetails.swift; sourceTree = "<group>"; };
 		3C60D4F42921ED1200283F91 /* MemoryInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryInfoViewModel.swift; sourceTree = "<group>"; };
 		3CA351902939A7E900E3735C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -47,6 +51,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C2AB9DB298FD8F900BC90B9 /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				3C2AB9D5298FB04900BC90B9 /* SetupView.swift */,
+				3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */,
+				3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */,
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
 		3C60D4F32921ED0200283F91 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -59,8 +73,8 @@
 		3CA3518F2939A7DA00E3735C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3C2AB9DB298FD8F900BC90B9 /* Setup */,
 				3CD43271291FB9FF0020B7FB /* HomeView.swift */,
-				3C2AB9D5298FB04900BC90B9 /* SetupView.swift */,
 				3CB5E64E298580520032D906 /* MenuBarView.swift */,
 				3C0D8D492982C27B00EBADE9 /* WarningView.swift */,
 				3CA351902939A7E900E3735C /* SettingsView.swift */,
@@ -185,10 +199,12 @@
 				3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */,
 				3CB5E64F298580520032D906 /* MenuBarView.swift in Sources */,
 				3CD43272291FB9FF0020B7FB /* HomeView.swift in Sources */,
+				3C2AB9DD298FD90800BC90B9 /* FinishSetupView.swift in Sources */,
 				3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */,
 				3C0D8D4A2982C27B00EBADE9 /* WarningView.swift in Sources */,
 				3C2AB9D6298FB04900BC90B9 /* SetupView.swift in Sources */,
 				3C60D4F52921ED1200283F91 /* MemoryInfoViewModel.swift in Sources */,
+				3C2AB9DF298FE0E500BC90B9 /* SetupContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,6 +21,25 @@ class MemoryInfoViewModel: ObservableObject {
 		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
 	}
 	
+	func verifyScriptFile(completion: @escaping (Bool) -> Void) {
+		DispatchQueue.global(qos: .userInitiated).async {
+			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+			let shellScript = path + "/script.sh"
+			
+			guard FileManager.default.fileExists(atPath: shellScript) else {
+				completion(false)
+				return
+			}
+			
+			guard ((try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript))) != nil) else {
+				completion(false)
+				return
+			}
+			
+			completion(true)
+		}
+	}
+	
 	func reloadMemoryInfo() {
 		// Create new thread to run script
 		DispatchQueue.global(qos: .userInitiated).async {
@@ -34,7 +53,9 @@ class MemoryInfoViewModel: ObservableObject {
 			}
 			
 			// Use NSUserUnixTask to run the script
-			let unixScript = try! NSUserUnixTask(url: URL(fileURLWithPath: shellScript))
+			guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+				return
+			}
 
 			// Get the output of the script to a variable
 			let pipe = Pipe()

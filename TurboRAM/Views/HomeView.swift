@@ -139,7 +139,7 @@ struct HomeView: View {
 		}
 		.frame(width: 800, height: 800)
 		.sheet(isPresented: $shouldShowSetupSheet, content: {
-			SetupView(shouldShowSetupSheet: $shouldShowSetupSheet)
+			SetupContainer(shouldShowSetupSheet: $shouldShowSetupSheet)
 				.interactiveDismissDisabled()
 		})
 		.sheet(isPresented: $shouldShowSettingsSheet, content: {

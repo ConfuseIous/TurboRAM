@@ -10,7 +10,9 @@ import SwiftUI
 struct SetupView: View {
 	
 	@State private var shouldExpand = false
-	@Binding var shouldShowSetupSheet: Bool
+	@State private var shouldShowError = false
+	
+	@Binding var scriptInstalled: Bool
 	
 	func openFolderSelectionPanel(completion: @escaping (URL?) -> Void) {
 		let openPanel = NSOpenPanel()
@@ -30,12 +32,15 @@ struct SetupView: View {
 		VStack {
 			Text("Welcome to TurboRAM.")
 				.font(.system(size: 25))
+				.multilineTextAlignment(.center)
 				.padding()
 			Text("To get process information, TurboRAM uses a simple script.")
 				.font(.system(size: 15))
+				.multilineTextAlignment(.center)
 				.padding()
 			Text("To proceed, please allow TurboRAM to save this script by clicking on the Allow button and then on Open.")
 				.font(.system(size: 15))
+				.multilineTextAlignment(.center)
 				.padding()
 			ZStack {
 				RoundedRectangle(cornerRadius: 10)
@@ -75,7 +80,6 @@ struct SetupView: View {
 			}
 			.frame(height: shouldExpand ? 400 : 120)
 			.padding(.vertical)
-			Spacer()
 			Button(action: {
 				openFolderSelectionPanel(completion: { folderURL in
 					DispatchQueue.global(qos: .userInitiated).async {
@@ -85,20 +89,30 @@ struct SetupView: View {
 								let file = URL(fileURLWithPath: Bundle.main.path(forResource: "script", ofType: "sh")!)
 								let data = try Data(contentsOf: file)
 								try data.write(to: URL(fileURLWithPath: fileURL))
-								print("yeet!")
+								withAnimation {
+									scriptInstalled.toggle()
+								}
 							} else {
-								print("not yeet")
+								shouldShowError.toggle()
 							}
 						} catch {
-							print("very unyeet")
+							shouldShowError.toggle()
 						}
 					}
 				})
 			}, label: {
 				Text("Allow")
+					.font(.system(size: 15))
+					.padding()
 			})
 			Spacer()
 		}
+		.alert(isPresented: $shouldShowError, content: {
+			Alert(
+				title: Text("Something went wrong"),
+				message: Text("The script could not be saved. Please try again.")
+			)
+		})
 		.frame(width: 400, height: 750)
 		.padding()
 	}
