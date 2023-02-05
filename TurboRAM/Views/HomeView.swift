@@ -18,6 +18,7 @@ struct HomeView: View {
 	
 	@State private var rotationAngle: Angle = Angle(degrees: 0)
 	
+	@State private var shouldShowSetupSheet = false
 	@State private var shouldShowSettingsSheet = false
 	@State private var shouldShowWarningSheet = false
 	
@@ -119,6 +120,10 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
+			
+			if !UserDefaults.standard.bool(forKey: "setupCompleted") {
+				shouldShowSetupSheet.toggle()
+			}
 		}
 		.onReceive(timer) { _ in
 			print("DEBUG: timer RECEIVED")
@@ -133,6 +138,10 @@ struct HomeView: View {
 			selectedIndex = nil
 		}
 		.frame(width: 800, height: 800)
+		.sheet(isPresented: $shouldShowSetupSheet, content: {
+			SetupContainer(shouldShowSetupSheet: $shouldShowSetupSheet)
+				.interactiveDismissDisabled()
+		})
 		.sheet(isPresented: $shouldShowSettingsSheet, content: {
 			SettingsView(shouldShowSettingsSheet: $shouldShowSettingsSheet)
 		})
