@@ -28,9 +28,6 @@ struct SettingsView: View {
 				}).padding(.leading)
 			}.padding(.bottom)
 			Divider()
-			//			Text("TurboRAM will alert you if any process uses \(minimumMultiplier) times more memory from when it was first tracked and is now using \(threshold)MB of memory or more.")
-			//				.font(.system(size: 12))
-			//				.foregroundColor(.secondary)
 			VStack {
 				HStack {
 					Text("Ignore processes that use less than:")
@@ -47,12 +44,12 @@ struct SettingsView: View {
 			}
 			VStack {
 				HStack {
-					Text("Warn me if a process uses:")
+					Text("Warn me if a process uses at least:")
 					Spacer()
 				}
 				TextField("", text: $minimumMultiplier)
 				HStack {
-					Text("times more memory than when it was first tracked.")
+					Text("times the memory it was using when it was first tracked.")
 					Spacer()
 				}
 			}.padding(.bottom)
@@ -74,7 +71,7 @@ struct SettingsView: View {
 				}
 				
 				UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
-				UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageminimumMultiplier")
+				UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageMultiplier")
 				
 				shouldShowSettingsSheet.toggle()
 			}, label: {

@@ -99,6 +99,7 @@ class MemoryInfoViewModel: ObservableObject {
 						if character == " " && reversedColumn[reversedColumn.index(reversedColumn.startIndex, offsetBy: index - 1)] != " " {
 							if currentProperty == 0 {
 								// Find process PID
+#warning("handle optionals better")
 								currentProcess.id = Int(String(propertyString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines))!
 								currentProperty += 1
 							} else {
@@ -158,12 +159,11 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	
 	func findOffendingProcesses() {
-		// Returns all processes that grew memory usage by at least 50% since the first run and are using at least 500MB
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
 			return (!ignoredProcessIDs.contains(where: {$0 == proc.id}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
 		}).compactMap { process in
-			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier")) else { return nil }
+			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * UserDefaults.standard.float(forKey: "minimumMemoryUsageMultiplier")) else { return nil }
 			return process
 		}
 		

@@ -11,7 +11,7 @@ struct HomeView: View {
 	
 	let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // Check every minute
 	
-	@AppStorage("minimumMemoryUsageminimumMultiplier") private var minimumMemoryUsageminimumMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageminimumMultiplier")
+	@AppStorage("minimumMemoryUsageMultiplier") private var minimumMemoryUsageMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageMultiplier")
 	@AppStorage("minimumMemoryUsageThreshold") private var minimumMemoryUsageThreshold = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
 	
 	@State private var selectedIndex: Int?
@@ -44,7 +44,7 @@ struct HomeView: View {
 						Spacer()
 					}
 					HStack {
-						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times more memory from when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
+						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageMultiplier as NSNumber) ?? "unknown") times more memory from when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
 							.font(.system(size: 12))
 							.foregroundColor(.secondary)
 						Spacer()
