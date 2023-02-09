@@ -10,7 +10,7 @@ import UserNotifications
 
 struct HomeView: View {
 	
-	let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // Check every minute
+	let timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect() // Check every 5 minutes
 	
 	@AppStorage("minimumMemoryUsageMultiplier") private var minimumMemoryUsageMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageMultiplier")
 	@AppStorage("minimumMemoryUsageThreshold") private var minimumMemoryUsageThreshold = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
@@ -133,6 +133,7 @@ struct HomeView: View {
 			if !UserDefaults.standard.bool(forKey: "setupCompleted") {
 				UserDefaults.standard.set(500, forKey: "minimumMemoryUsageThreshold")
 				UserDefaults.standard.set(1.5, forKey: "minimumMultiplier")
+				UserDefaults.standard.set(60, forKey: "checkingFrequency")
 				shouldShowSetupSheet.toggle()
 			}
 		}

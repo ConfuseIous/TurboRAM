@@ -14,6 +14,7 @@ struct SettingsView: View {
 	
 	@State private var threshold: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
 	@State private var minimumMultiplier: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageMultiplier"))
+	@State private var checkingFrequency: String = String(UserDefaults.standard.float(forKey: "checkingFrequency"))
 	
 	var body: some View {
 		VStack(spacing: 20) {
@@ -33,12 +34,9 @@ struct SettingsView: View {
 					Text("Ignore processes that use less than:")
 					Spacer()
 				}
-				HStack {
 					TextField("", text: $threshold)
-					Text("(in MB)")
-				}
 				HStack {
-					Text("of memory.")
+					Text("MB of memory.")
 					Spacer()
 				}
 			}
@@ -50,6 +48,17 @@ struct SettingsView: View {
 				TextField("", text: $minimumMultiplier)
 				HStack {
 					Text("times the memory it was using when it was first tracked.")
+					Spacer()
+				}
+			}
+			VStack {
+				HStack {
+					Text("Check every:")
+					Spacer()
+				}
+				TextField("", text: $checkingFrequency)
+				HStack {
+					Text("seconds.")
 					Spacer()
 				}
 			}.padding(.bottom)
@@ -70,8 +79,15 @@ struct SettingsView: View {
 					return
 				}
 				
+				let acceptableFrequencyRange = 60...600
+				guard let checkingFrequencyFloat = Float(checkingFrequency) else {
+					shouldShowConfirmationAlert.toggle()
+					return
+				}
+				
 				UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
 				UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageMultiplier")
+				UserDefaults.standard.set(checkingFrequencyFloat, forKey: "checkingFrequency")
 				
 				shouldShowSettingsSheet.toggle()
 			}, label: {
@@ -90,6 +106,9 @@ struct SettingsView: View {
 					}
 					if let minimumMultiplierFloat = Float(minimumMultiplier) {
 						UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageMultiplier")
+					}
+					if let checkingFrequencyFloat = Float(checkingFrequency) {
+						UserDefaults.standard.set(checkingFrequencyFloat, forKey: "checkingFrequency")
 					}
 					
 					shouldShowSettingsSheet.toggle()
