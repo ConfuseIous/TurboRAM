@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct HomeView: View {
 	
@@ -44,7 +45,7 @@ struct HomeView: View {
 						Spacer()
 					}
 					HStack {
-						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageMultiplier as NSNumber) ?? "unknown") times more memory from when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
+						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageMultiplier as NSNumber) ?? "unknown") times the memory it was using when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
 							.font(.system(size: 12))
 							.foregroundColor(.secondary)
 						Spacer()
@@ -121,7 +122,17 @@ struct HomeView: View {
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
 			
+			UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+				if success {
+					print("Notification permission granted")
+				} else if let error = error {
+					print(error.localizedDescription)
+				}
+			}
+			
 			if !UserDefaults.standard.bool(forKey: "setupCompleted") {
+				UserDefaults.standard.set(500, forKey: "minimumMemoryUsageThreshold")
+				UserDefaults.standard.set(1.5, forKey: "minimumMultiplier")
 				shouldShowSetupSheet.toggle()
 			}
 		}

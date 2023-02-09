@@ -7,6 +7,7 @@
 
 import AppKit
 import Foundation
+import UserNotifications
 
 class MemoryInfoViewModel: ObservableObject {
 	
@@ -56,7 +57,7 @@ class MemoryInfoViewModel: ObservableObject {
 			guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
 				return
 			}
-
+			
 			// Get the output of the script to a variable
 			let pipe = Pipe()
 			unixScript.standardOutput = pipe.fileHandleForWriting
@@ -138,7 +139,7 @@ class MemoryInfoViewModel: ObservableObject {
 				//		}
 				
 				//		print("TOTAL RAM USED:", sum)
-  
+				
 				self.initialValues.merge(processes.reduce(into: [Int: Float]()) {
 					$0[$1.id] = $1.memoryUsage
 				}, uniquingKeysWith: { (current, _) in current })
@@ -169,6 +170,9 @@ class MemoryInfoViewModel: ObservableObject {
 		
 		self.offendingProcesses = commonProcesses
 		print("FOUND \(self.offendingProcesses.count) OFFENDING PROCESSES")
+		DispatchQueue.main.async {
+			self.sendNotificationForOffendingProcesses(processes: self.offendingProcesses)
+		}
 	}
 	
 	func quitProcessWithPID(pid: Int) {
@@ -220,5 +224,24 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 		
 		return ignoredProcessIDs
+	}
+	
+	func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
+		if !processes.isEmpty {
+			var totalMemory: Float = 0.0
+			for process in processes {
+				totalMemory += process.memoryUsage
+			}
+			
+			let content = UNMutableNotificationContent()
+			content.title = "You can free \(totalMemory)MB of RAM"
+			content.subtitle = (processes.count == 1) ? "1 process is hogging your computer's memory" : "\(processes.count) processes are hogging your computer's memory"
+			content.sound = UNNotificationSound.default
+			
+			let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+			let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+			
+			UNUserNotificationCenter.current().add(request)
+		}
 	}
 }

@@ -13,7 +13,7 @@ struct SettingsView: View {
 	@Binding var shouldShowSettingsSheet: Bool
 	
 	@State private var threshold: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
-	@State private var minimumMultiplier: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageminimumMultiplier"))
+	@State private var minimumMultiplier: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageMultiplier"))
 	
 	var body: some View {
 		VStack(spacing: 20) {
@@ -89,7 +89,7 @@ struct SettingsView: View {
 						UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
 					}
 					if let minimumMultiplierFloat = Float(minimumMultiplier) {
-						UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageminimumMultiplier")
+						UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageMultiplier")
 					}
 					
 					shouldShowSettingsSheet.toggle()

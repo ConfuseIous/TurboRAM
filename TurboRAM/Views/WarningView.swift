@@ -27,7 +27,7 @@ struct WarningView: View {
 	var body: some View {
 		VStack {
 			HStack {
-				Text("These processes have seen a significant increase in memory usage of over \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times the usage when they were first tracked and are now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
+				Text("These processes have increased their memory usage to \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times the memory when they were first tracked and are now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
 				Spacer()
 				Button(action: {
 					shouldShowWarningSheet.toggle()
