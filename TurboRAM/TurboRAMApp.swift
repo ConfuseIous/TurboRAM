@@ -21,28 +21,20 @@ struct TurboRAMApp: App {
 	
 	var body: some Scene {
 		//		if #available(macOS 13.0, *) {
-		return WindowGroup {
+		WindowGroup {
 			HomeView()
 				.environmentObject(MemoryInfoViewModel())
 				.onAppear {
 					let window = NSApp.windows.first
 					window?.level = .floating
 				}
-		}.windowResizability(.contentSize)
-		//		} else {
-		//			return WindowGroup {
-		//				HomeView()
-		//					.environmentObject(MemoryInfoViewModel())
-		//					.onAppear {
-		//						let window = NSApp.windows.first
-		//						window?.level = .floating
-		//					}
-		//			}
-		//		}
-		//		MenuBarExtra(content: {
-		//			MenuBarView()
-		//		}, label: {
-		//			Image(systemName: "cpu")
-		//		})
+		}
+		.windowResizability(.contentSize)
+		MenuBarExtra(content: {
+			MenuBarView()
+				.environmentObject(MemoryInfoViewModel())
+		}, label: {
+			Image(systemName: "cpu")
+		}).menuBarExtraStyle(.window)
 	}
 }

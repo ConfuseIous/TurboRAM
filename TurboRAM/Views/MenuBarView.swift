@@ -5,15 +5,50 @@
 //  Created by Karandeep Singh on 29/1/23.
 //
 //
-//import SwiftUI
-//
-//struct MenuBarView: View {
-//	
-//    var body: some View {
-//		Table(memoryInfoViewModel.processes, selection: $selectedIndex) {
-//			TableColumn("Name", value: \.processName)
-//			TableColumn("Memory Used (Megabytes)") { Text(String($0.memoryUsage)) }
-//			TableColumn("Process ID") { Text(String($0.id)) }
-//		}
-//    }
-//}
+
+import SwiftUI
+
+struct MenuBarView: View {
+	
+	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
+	
+	var body: some View {
+		VStack {
+			HStack {
+				Text("TurboRAM")
+					.font(.system(size: 20))
+				Spacer()
+			}
+			List(memoryInfoViewModel.processes) { process in
+				HStack {
+					Text(process.processName)
+					Spacer()
+					Text(String(process.memoryUsage))
+				}
+			}
+			Divider()
+			Button("Reload") {
+				memoryInfoViewModel.reloadMemoryInfo()
+			}
+			.keyboardShortcut("r")
+			.buttonStyle(.borderless)
+			Button("Show Main Window") {
+#warning("do something")
+			}
+			.keyboardShortcut("s")
+			.buttonStyle(.borderless)
+			Button("Quit") {
+				NSApplication.shared.terminate(nil)
+			}
+			.keyboardShortcut("q")
+			.buttonStyle(.borderless)
+		}
+		.padding()
+		.onAppear() {
+			print("onappear")
+			memoryInfoViewModel.reloadMemoryInfo()
+			memoryInfoViewModel.processes = memoryInfoViewModel.processes.filter({$0.memoryUsage >= 100})
+			print(memoryInfoViewModel.processes.count)
+		}
+	}
+}

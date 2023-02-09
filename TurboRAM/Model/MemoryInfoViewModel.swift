@@ -100,8 +100,10 @@ class MemoryInfoViewModel: ObservableObject {
 						if character == " " && reversedColumn[reversedColumn.index(reversedColumn.startIndex, offsetBy: index - 1)] != " " {
 							if currentProperty == 0 {
 								// Find process PID
-#warning("handle optionals better")
-								currentProcess.id = Int(String(propertyString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines))!
+								guard let currentProcessID = Int(String(propertyString.reversed()).trimmingCharacters(in: .whitespacesAndNewlines)) else {
+									return
+								}
+								currentProcess.id = currentProcessID
 								currentProperty += 1
 							} else {
 								// Find Process Name
