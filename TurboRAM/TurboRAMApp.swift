@@ -10,6 +10,8 @@ import SwiftUI
 @main
 struct TurboRAMApp: App {
 	
+	@NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+	
 	init() {
 		if UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold") == 0.0 {
 			UserDefaults.standard.set(500.0, forKey: "minimumMemoryUsageThreshold")
@@ -20,29 +22,10 @@ struct TurboRAMApp: App {
 	}
 	
 	var body: some Scene {
-		//		if #available(macOS 13.0, *) {
-		return WindowGroup {
-			HomeView()
-				.environmentObject(MemoryInfoViewModel())
-				.onAppear {
-					let window = NSApp.windows.first
-					window?.level = .floating
-				}
-		}.windowResizability(.contentSize)
-		//		} else {
-		//			return WindowGroup {
-		//				HomeView()
-		//					.environmentObject(MemoryInfoViewModel())
-		//					.onAppear {
-		//						let window = NSApp.windows.first
-		//						window?.level = .floating
-		//					}
-		//			}
-		//		}
-		//		MenuBarExtra(content: {
-		//			MenuBarView()
-		//		}, label: {
-		//			Image(systemName: "cpu")
-		//		})
+		MenuBarExtra(content: {
+			MenuBarView()
+		}, label: {
+			Image(systemName: "cpu")
+		}).menuBarExtraStyle(.window)
 	}
 }

@@ -79,8 +79,8 @@ struct SettingsView: View {
 					return
 				}
 				
-				let acceptableFrequencyRange = 60...600
-				guard let checkingFrequencyFloat = Float(checkingFrequency) else {
+				let acceptableFrequencyRange = 60.0...600.0
+				guard let checkingFrequencyFloat = Float(checkingFrequency), acceptableFrequencyRange.contains(Double(minimumMultiplierFloat)) else {
 					shouldShowConfirmationAlert.toggle()
 					return
 				}

@@ -14,7 +14,7 @@ struct WarningView: View {
 	
 	@Binding var shouldShowWarningSheet: Bool
 	
-	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
+	var memoryInfoViewModel: MemoryInfoViewModel
 	
 	let formatter: NumberFormatter = {
 		let formatter = NumberFormatter()
