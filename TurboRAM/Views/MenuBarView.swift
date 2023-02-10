@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MenuBarView: View {
 	
-	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
+	let memoryInfoViewModel = MemoryInfoViewModel()
 	
 	var body: some View {
 		VStack {
@@ -33,7 +33,7 @@ struct MenuBarView: View {
 			.keyboardShortcut("r")
 			.buttonStyle(.borderless)
 			Button("Show Main Window") {
-#warning("do something")
+				MainWindowManager.shared.showWindow()
 			}
 			.keyboardShortcut("s")
 			.buttonStyle(.borderless)

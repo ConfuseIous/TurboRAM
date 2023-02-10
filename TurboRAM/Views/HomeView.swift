@@ -25,7 +25,7 @@ struct HomeView: View {
 	
 	@State private var shouldShowQuitConfirmationAlert = false
 	
-	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
+	var memoryInfoViewModel = MemoryInfoViewModel()
 	
 	let formatter: NumberFormatter = {
 		let formatter = NumberFormatter()
@@ -149,7 +149,7 @@ struct HomeView: View {
 		.onTapGesture {
 			selectedIndex = nil
 		}
-		.frame(width: 800, height: 800)
+		.frame(width: 750, height: 750)
 		.sheet(isPresented: $shouldShowSetupSheet, content: {
 			SetupContainer(shouldShowSetupSheet: $shouldShowSetupSheet)
 				.interactiveDismissDisabled()
@@ -158,7 +158,7 @@ struct HomeView: View {
 			SettingsView(shouldShowSettingsSheet: $shouldShowSettingsSheet)
 		})
 		.sheet(isPresented: $shouldShowWarningSheet, content: {
-			WarningView(shouldShowWarningSheet: $shouldShowWarningSheet)
+			WarningView(shouldShowWarningSheet: $shouldShowWarningSheet, memoryInfoViewModel: memoryInfoViewModel)
 		})
 		.padding()
 		.fixedSize(horizontal: true, vertical: false)
