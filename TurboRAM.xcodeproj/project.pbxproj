@@ -76,16 +76,39 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		3C6ED5A32996A19100096978 /* MainWindow */ = {
+			isa = PBXGroup;
+			children = (
+				3C6ED59D2995EE1500096978 /* MainWindow.swift */,
+				3C6ED5A129969C2200096978 /* MainWindowManager.swift */,
+			);
+			path = MainWindow;
+			sourceTree = "<group>";
+		};
+		3C6ED5A42996A1A800096978 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				3CD43271291FB9FF0020B7FB /* HomeView.swift */,
+				3C0D8D492982C27B00EBADE9 /* WarningView.swift */,
+				3CA351902939A7E900E3735C /* SettingsView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		3C6ED5A52996A1B300096978 /* Menu Bar */ = {
+			isa = PBXGroup;
+			children = (
+				3CB5E64E298580520032D906 /* MenuBarView.swift */,
+			);
+			path = "Menu Bar";
+			sourceTree = "<group>";
+		};
 		3CA3518F2939A7DA00E3735C /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				3C2AB9DB298FD8F900BC90B9 /* Setup */,
-				3CD43271291FB9FF0020B7FB /* HomeView.swift */,
-				3CB5E64E298580520032D906 /* MenuBarView.swift */,
-				3C6ED59D2995EE1500096978 /* MainWindow.swift */,
-				3C6ED5A129969C2200096978 /* MainWindowManager.swift */,
-				3C0D8D492982C27B00EBADE9 /* WarningView.swift */,
-				3CA351902939A7E900E3735C /* SettingsView.swift */,
+				3C6ED5A42996A1A800096978 /* Main */,
+				3C6ED5A52996A1B300096978 /* Menu Bar */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -112,6 +135,7 @@
 				3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */,
 				3C6ED59F2995EEA700096978 /* AppDelegate.swift */,
 				3CA3518F2939A7DA00E3735C /* Views */,
+				3C6ED5A32996A19100096978 /* MainWindow */,
 				3C60D4F32921ED0200283F91 /* Model */,
 				3CD43273291FBA000020B7FB /* Assets.xcassets */,
 				3CD43278291FBA000020B7FB /* TurboRAM.entitlements */,
