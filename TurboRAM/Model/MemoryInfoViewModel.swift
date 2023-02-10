@@ -18,8 +18,8 @@ class MemoryInfoViewModel: ObservableObject {
 	@Published var ignoredProcessIDs: [Int] = []
 	
 	init() {
-		reloadMemoryInfo()
 		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
+		self.reloadMemoryInfo()
 	}
 	
 	func verifyScriptFile(completion: @escaping (Bool) -> Void) {

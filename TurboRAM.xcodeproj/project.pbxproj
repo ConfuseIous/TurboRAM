@@ -133,10 +133,10 @@
 			isa = PBXGroup;
 			children = (
 				3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */,
-				3C6ED59F2995EEA700096978 /* AppDelegate.swift */,
 				3CA3518F2939A7DA00E3735C /* Views */,
 				3C6ED5A32996A19100096978 /* MainWindow */,
 				3C60D4F32921ED0200283F91 /* Model */,
+				3C6ED59F2995EEA700096978 /* AppDelegate.swift */,
 				3CD43273291FBA000020B7FB /* Assets.xcassets */,
 				3CD43278291FBA000020B7FB /* TurboRAM.entitlements */,
 				3C2AB9D9298FB89B00BC90B9 /* script.sh */,
