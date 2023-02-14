@@ -85,8 +85,8 @@ struct SetupView: View {
 					DispatchQueue.global(qos: .userInitiated).async {
 						do {
 							if let folderURL {
-								let fileURL = folderURL.appendingPathComponent("script.sh").path
-								let file = URL(fileURLWithPath: Bundle.main.path(forResource: "script", ofType: "sh")!)
+								let fileURL = folderURL.appendingPathComponent("GetProcessInfo.sh").path
+								let file = URL(fileURLWithPath: Bundle.main.path(forResource: "GetProcessInfo", ofType: "sh")!)
 								let data = try Data(contentsOf: file)
 								try data.write(to: URL(fileURLWithPath: fileURL))
 								withAnimation {

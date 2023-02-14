@@ -11,7 +11,6 @@ struct FinishSetupView: View {
 	
 	@State private var shouldShowError = false
 	@Binding var shouldShowSetupSheet: Bool
-	@EnvironmentObject var memoryInfoViewModel: MemoryInfoViewModel
 	
 	var body: some View {
 		VStack {
@@ -39,13 +38,13 @@ struct FinishSetupView: View {
 			Button(action: {
 				let pasteboard = NSPasteboard.general
 				pasteboard.clearContents()
-				pasteboard.writeObjects(["chmod a+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/script.sh\"" as NSString])
+				pasteboard.writeObjects(["chmod a+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\"" as NSString])
 			}, label: {
 				Text("Copy Command")
 			})
 			Spacer()
 			Button(action: {
-				memoryInfoViewModel.verifyScriptFile(completion: { success in
+				MemoryInfoViewModel.verifyScriptFile(completion: { success in
 					if success {
 						UserDefaults.standard.set(true, forKey: "setupCompleted")
 						shouldShowSetupSheet.toggle()

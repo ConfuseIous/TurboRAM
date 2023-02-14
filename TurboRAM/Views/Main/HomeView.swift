@@ -132,7 +132,7 @@ struct HomeView: View {
 			
 			if !UserDefaults.standard.bool(forKey: "setupCompleted") {
 				UserDefaults.standard.set(500, forKey: "minimumMemoryUsageThreshold")
-				UserDefaults.standard.set(1.5, forKey: "minimumMultiplier")
+				UserDefaults.standard.set(1.5, forKey: "minimumMemoryUsageMultiplier")
 				UserDefaults.standard.set(60, forKey: "checkingFrequency")
 				shouldShowSetupSheet.toggle()
 			}

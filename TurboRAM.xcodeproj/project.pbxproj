@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3C0D8D4A2982C27B00EBADE9 /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D8D492982C27B00EBADE9 /* WarningView.swift */; };
 		3C2AB9D6298FB04900BC90B9 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D5298FB04900BC90B9 /* SetupView.swift */; };
-		3C2AB9DA298FB89B00BC90B9 /* script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D9298FB89B00BC90B9 /* script.sh */; };
+		3C2AB9DA298FB89B00BC90B9 /* GetProcessInfo.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */; };
 		3C2AB9DD298FD90800BC90B9 /* FinishSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */; };
 		3C2AB9DF298FE0E500BC90B9 /* SetupContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */; };
 		3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5B8FD92929551F004AC381 /* ProcessDetails.swift */; };
@@ -28,7 +28,7 @@
 /* Begin PBXFileReference section */
 		3C0D8D492982C27B00EBADE9 /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		3C2AB9D5298FB04900BC90B9 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
-		3C2AB9D9298FB89B00BC90B9 /* script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = script.sh; sourceTree = SOURCE_ROOT; };
+		3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = GetProcessInfo.sh; sourceTree = SOURCE_ROOT; };
 		3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishSetupView.swift; sourceTree = "<group>"; };
 		3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupContainer.swift; sourceTree = "<group>"; };
 		3C5B8FD92929551F004AC381 /* ProcessDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessDetails.swift; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 				3C6ED59F2995EEA700096978 /* AppDelegate.swift */,
 				3CD43273291FBA000020B7FB /* Assets.xcassets */,
 				3CD43278291FBA000020B7FB /* TurboRAM.entitlements */,
-				3C2AB9D9298FB89B00BC90B9 /* script.sh */,
+				3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */,
 				3CD43275291FBA000020B7FB /* Preview Content */,
 			);
 			path = TurboRAM;
@@ -216,7 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3CD43277291FBA000020B7FB /* Preview Assets.xcassets in Resources */,
-				3C2AB9DA298FB89B00BC90B9 /* script.sh in Resources */,
+				3C2AB9DA298FB89B00BC90B9 /* GetProcessInfo.sh in Resources */,
 				3CD43274291FBA000020B7FB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

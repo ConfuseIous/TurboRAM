@@ -22,10 +22,10 @@ class MemoryInfoViewModel: ObservableObject {
 		self.reloadMemoryInfo()
 	}
 	
-	func verifyScriptFile(completion: @escaping (Bool) -> Void) {
+	static func verifyScriptFile(completion: @escaping (Bool) -> Void) {
 		DispatchQueue.global(qos: .userInitiated).async {
 			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
-			let shellScript = path + "/script.sh"
+			let shellScript = path + "/GetProcessInfo.sh"
 			
 			guard FileManager.default.fileExists(atPath: shellScript) else {
 				completion(false)
@@ -44,8 +44,11 @@ class MemoryInfoViewModel: ObservableObject {
 	func reloadMemoryInfo() {
 		// Create new thread to run script
 		DispatchQueue.global(qos: .userInitiated).async {
+			guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
+				return
+			}
 			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
-			let shellScript = path + "/script.sh"
+			let shellScript = path + "/GetProcessInfo.sh"
 			
 			// Show an error if the script doesn't exist
 			guard FileManager.default.fileExists(atPath: shellScript) else {
@@ -55,6 +58,7 @@ class MemoryInfoViewModel: ObservableObject {
 			
 			// Use NSUserUnixTask to run the script
 			guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+				print("NSUserUnixTask creation failed")
 				return
 			}
 			
