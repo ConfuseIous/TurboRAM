@@ -181,39 +181,40 @@ class MemoryInfoViewModel: ObservableObject {
 	}
 	
 	func quitProcessWithPID(pid: Int) {
-		
-		guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
-			return
-		}
-
-		let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
-		let shellScript = path + "/KillProcess.sh"
-
-		// Show an error if the script doesn't exist
-		guard FileManager.default.fileExists(atPath: shellScript) else {
-			print("Script not found at \(shellScript)")
-			return
-		}
-
-		// Use NSUserUnixTask to run the script
-		guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
-			print("NSUserUnixTask creation failed")
-			return
-		}
-
-		// Get the output of the script to a variable
-		let pipe = Pipe()
-		unixScript.standardOutput = pipe.fileHandleForWriting
-
-		unixScript.execute(withArguments: []) { error in
-			if let error {
-				print("Failed: ", error)
+		DispatchQueue.global(qos: .userInitiated).async {
+			guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
 				return
 			}
+			
+			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+			let shellScript = path + "/KillProcess.sh"
+			
+			// Show an error if the script doesn't exist
+			guard FileManager.default.fileExists(atPath: shellScript) else {
+				print("Script not found at \(shellScript)")
+				return
+			}
+			
+			// Use NSUserUnixTask to run the script
+			guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+				print("NSUserUnixTask creation failed")
+				return
+			}
+			
+			// Get the output of the script to a variable
+			let pipe = Pipe()
+			unixScript.standardOutput = pipe.fileHandleForWriting
+			
+			unixScript.execute(withArguments: [String(pid)]) { error in
+				if let error {
+					print("Failed: ", error)
+					return
+				}
+			}
+			
+			let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
+			print(output)
 		}
-		
-		let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
-		print(output)
 	}
 	
 	func getPermanentlyIgnoredProcessIDs() -> [Int] {
