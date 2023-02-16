@@ -10,10 +10,11 @@ import UserNotifications
 
 struct HomeView: View {
 	
-	let timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect() // Check every 5 minutes
-	
+	@AppStorage("checkingFrequency") private var checkingFrequency = UserDefaults.standard.double(forKey: "checkingFrequency")
 	@AppStorage("minimumMemoryUsageMultiplier") private var minimumMemoryUsageMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageMultiplier")
 	@AppStorage("minimumMemoryUsageThreshold") private var minimumMemoryUsageThreshold = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
+	
+	@State private var timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
 	
 	@State private var selectedIndex: Int?
 	
@@ -146,6 +147,9 @@ struct HomeView: View {
 				print("DEBUG: TOGGLED shouldShowWarningSheet")
 			}
 		}
+		.onChange(of: checkingFrequency, perform: { _ in
+			self.timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
+		})
 		.onTapGesture {
 			selectedIndex = nil
 		}
