@@ -164,7 +164,6 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	
 	func findOffendingProcesses() {
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
@@ -182,41 +181,39 @@ class MemoryInfoViewModel: ObservableObject {
 	}
 	
 	func quitProcessWithPID(pid: Int) {
-		let task = Process()
+		
+		guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
+			return
+		}
+
+		let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+		let shellScript = path + "/KillProcess.sh"
+
+		// Show an error if the script doesn't exist
+		guard FileManager.default.fileExists(atPath: shellScript) else {
+			print("Script not found at \(shellScript)")
+			return
+		}
+
+		// Use NSUserUnixTask to run the script
+		guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+			print("NSUserUnixTask creation failed")
+			return
+		}
+
+		// Get the output of the script to a variable
 		let pipe = Pipe()
-		
-		/* kill requires breaking the sandbox.
-		 killall does not, but requires the process name instead of PID.
-		 */
-		
-		//		task.launchPath = "/bin/kill"
-		//		task.arguments = [String(pid)]
-		//		task.standardOutput = pipe
-		
-		// Get process name by PID
-		task.launchPath = "/bin/bash"
-		task.arguments = ["-c", "ps -p \(pid) -o comm= | awk -F/ '{print $NF}'"]
-		
-		task.standardOutput = pipe
-		task.launch()
-		
-		let data = pipe.fileHandleForReading.readDataToEndOfFile()
-		if let processName = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .newlines) {
-			kill(processName: processName)
+		unixScript.standardOutput = pipe.fileHandleForWriting
+
+		unixScript.execute(withArguments: []) { error in
+			if let error {
+				print("Failed: ", error)
+				return
+			}
 		}
 		
-		func kill(processName: String) {
-			let task = Process()
-			let pipe = Pipe()
-			
-			task.launchPath = "/usr/bin/killall"
-			task.arguments = [processName]
-			task.standardOutput = pipe
-			
-			try? task.run()
-		}
-		
-		try? task.run()
+		let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
+		print(output)
 	}
 	
 	func getPermanentlyIgnoredProcessIDs() -> [Int] {

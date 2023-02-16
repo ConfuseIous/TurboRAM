@@ -17,6 +17,7 @@
 		3C6ED59E2995EE1500096978 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6ED59D2995EE1500096978 /* MainWindow.swift */; };
 		3C6ED5A02995EEA700096978 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6ED59F2995EEA700096978 /* AppDelegate.swift */; };
 		3C6ED5A229969C2200096978 /* MainWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6ED5A129969C2200096978 /* MainWindowManager.swift */; };
+		3C814213299E784500B6B568 /* KillProcess.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C814212299E784500B6B568 /* KillProcess.sh */; };
 		3CA351912939A7E900E3735C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA351902939A7E900E3735C /* SettingsView.swift */; };
 		3CB5E64F298580520032D906 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB5E64E298580520032D906 /* MenuBarView.swift */; };
 		3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */; };
@@ -36,6 +37,7 @@
 		3C6ED59D2995EE1500096978 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		3C6ED59F2995EEA700096978 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C6ED5A129969C2200096978 /* MainWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowManager.swift; sourceTree = "<group>"; };
+		3C814212299E784500B6B568 /* KillProcess.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = KillProcess.sh; sourceTree = "<group>"; };
 		3CA351902939A7E900E3735C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3CB5E64E298580520032D906 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3CD4326C291FB9FF0020B7FB /* TurboRAM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TurboRAM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +142,7 @@
 				3CD43273291FBA000020B7FB /* Assets.xcassets */,
 				3CD43278291FBA000020B7FB /* TurboRAM.entitlements */,
 				3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */,
+				3C814212299E784500B6B568 /* KillProcess.sh */,
 				3CD43275291FBA000020B7FB /* Preview Content */,
 			);
 			path = TurboRAM;
@@ -217,6 +220,7 @@
 			files = (
 				3CD43277291FBA000020B7FB /* Preview Assets.xcassets in Resources */,
 				3C2AB9DA298FB89B00BC90B9 /* GetProcessInfo.sh in Resources */,
+				3C814213299E784500B6B568 /* KillProcess.sh in Resources */,
 				3CD43274291FBA000020B7FB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

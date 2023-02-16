@@ -38,7 +38,7 @@ struct FinishSetupView: View {
 			Button(action: {
 				let pasteboard = NSPasteboard.general
 				pasteboard.clearContents()
-				pasteboard.writeObjects(["chmod a+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\"" as NSString])
+				pasteboard.writeObjects(["chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\"" as NSString])
 			}, label: {
 				Text("Copy Command")
 			})
