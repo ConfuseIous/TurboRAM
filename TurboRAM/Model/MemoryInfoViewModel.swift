@@ -22,22 +22,52 @@ class MemoryInfoViewModel: ObservableObject {
 		self.reloadMemoryInfo()
 	}
 	
-	static func verifyScriptFile(completion: @escaping (Bool) -> Void) {
+	static func verifyScriptFiles(completion: @escaping (Bool) -> Void) {
+		let group = DispatchGroup()
+		var error = false
+		
+		group.enter()
 		DispatchQueue.global(qos: .userInitiated).async {
 			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
 			let shellScript = path + "/GetProcessInfo.sh"
 			
 			guard FileManager.default.fileExists(atPath: shellScript) else {
-				completion(false)
+				error = true
+				group.leave()
 				return
 			}
 			
 			guard ((try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript))) != nil) else {
-				completion(false)
+				error = true
+				group.leave()
 				return
 			}
 			
-			completion(true)
+			group.leave()
+		}
+		
+		group.enter()
+		DispatchQueue.global(qos: .userInitiated).async {
+			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+			let shellScript = path + "/KillProcess.sh"
+			
+			guard FileManager.default.fileExists(atPath: shellScript) else {
+				error = true
+				group.leave()
+				return
+			}
+			
+			guard ((try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript))) != nil) else {
+				error = true
+				group.leave()
+				return
+			}
+			
+			group.leave()
+		}
+		
+		group.notify(queue: .main) {
+			completion(!error)
 		}
 	}
 	
@@ -164,7 +194,6 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	
 	func findOffendingProcesses() {
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
@@ -182,41 +211,40 @@ class MemoryInfoViewModel: ObservableObject {
 	}
 	
 	func quitProcessWithPID(pid: Int) {
-		let task = Process()
-		let pipe = Pipe()
-		
-		/* kill requires breaking the sandbox.
-		 killall does not, but requires the process name instead of PID.
-		 */
-		
-		//		task.launchPath = "/bin/kill"
-		//		task.arguments = [String(pid)]
-		//		task.standardOutput = pipe
-		
-		// Get process name by PID
-		task.launchPath = "/bin/bash"
-		task.arguments = ["-c", "ps -p \(pid) -o comm= | awk -F/ '{print $NF}'"]
-		
-		task.standardOutput = pipe
-		task.launch()
-		
-		let data = pipe.fileHandleForReading.readDataToEndOfFile()
-		if let processName = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .newlines) {
-			kill(processName: processName)
-		}
-		
-		func kill(processName: String) {
-			let task = Process()
+		DispatchQueue.global(qos: .userInitiated).async {
+			guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
+				return
+			}
+			
+			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+			let shellScript = path + "/KillProcess.sh"
+			
+			// Show an error if the script doesn't exist
+			guard FileManager.default.fileExists(atPath: shellScript) else {
+				print("Script not found at \(shellScript)")
+				return
+			}
+			
+			// Use NSUserUnixTask to run the script
+			guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+				print("NSUserUnixTask creation failed")
+				return
+			}
+			
+			// Get the output of the script to a variable
 			let pipe = Pipe()
+			unixScript.standardOutput = pipe.fileHandleForWriting
 			
-			task.launchPath = "/usr/bin/killall"
-			task.arguments = [processName]
-			task.standardOutput = pipe
+			unixScript.execute(withArguments: [String(pid)]) { error in
+				if let error {
+					print("Failed: ", error)
+					return
+				}
+			}
 			
-			try? task.run()
+			let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
+			print(output)
 		}
-		
-		try? task.run()
 	}
 	
 	func getPermanentlyIgnoredProcessIDs() -> [Int] {

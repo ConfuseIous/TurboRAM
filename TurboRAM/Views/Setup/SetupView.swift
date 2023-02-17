@@ -34,11 +34,11 @@ struct SetupView: View {
 				.font(.system(size: 25))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("To get process information, TurboRAM uses a simple script.")
+			Text("TurboRAM uses simple scripts to get process information and to kill processes you select.")
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("To proceed, please allow TurboRAM to save this script by clicking on the Allow button and then on Open.")
+			Text("To proceed, please allow TurboRAM to save these scripts by clicking on the Allow button and then on Open.")
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
@@ -52,7 +52,7 @@ struct SetupView: View {
 						}
 					}, label: {
 						HStack {
-							Text("If you are an advanced user and want to verify the contents of this script:")
+							Text("If you are an advanced user and want to verify the contents of these scripts:")
 								.font(.system(size: 15))
 								.foregroundColor(.secondary)
 								.padding()
@@ -62,15 +62,21 @@ struct SetupView: View {
 					}).buttonStyle(.borderless)
 					Divider()
 					if shouldExpand {
-						Text("This script just runs the top command, which returns a sorted list of system processes. It will be stored in")
+						Text("These scripts will be stored in:")
 						Text("~/Library/Application Scripts/com.karandeepsingh.TurboRAM")
 							.font(.system(size: 10))
 							.padding()
 							.background(.black)
 							.foregroundColor(.white)
 							.padding(.bottom, 20)
-						Text("The exact command is:")
+						Text("This script returns a sorted list of system processes:")
 						Text("top -o mem -l 1 -stats \"command,mem,pid\"")
+							.font(.system(size: 10))
+							.padding()
+							.background(.black)
+							.foregroundColor(.white)
+						Text("This one kills the selected process:")
+						Text("kill -9 $1")
 							.font(.system(size: 10))
 							.padding()
 							.background(.black)
@@ -85,10 +91,16 @@ struct SetupView: View {
 					DispatchQueue.global(qos: .userInitiated).async {
 						do {
 							if let folderURL {
-								let fileURL = folderURL.appendingPathComponent("GetProcessInfo.sh").path
-								let file = URL(fileURLWithPath: Bundle.main.path(forResource: "GetProcessInfo", ofType: "sh")!)
-								let data = try Data(contentsOf: file)
+								var fileURL = folderURL.appendingPathComponent("GetProcessInfo.sh").path
+								var file = URL(fileURLWithPath: Bundle.main.path(forResource: "GetProcessInfo", ofType: "sh")!)
+								var data = try Data(contentsOf: file)
 								try data.write(to: URL(fileURLWithPath: fileURL))
+								
+								fileURL = folderURL.appendingPathComponent("KillProcess.sh").path
+								file = URL(fileURLWithPath: Bundle.main.path(forResource: "KillProcess", ofType: "sh")!)
+								data = try Data(contentsOf: file)
+								try data.write(to: URL(fileURLWithPath: fileURL))
+								
 								withAnimation {
 									scriptInstalled.toggle()
 								}
