@@ -22,22 +22,52 @@ class MemoryInfoViewModel: ObservableObject {
 		self.reloadMemoryInfo()
 	}
 	
-	static func verifyScriptFile(completion: @escaping (Bool) -> Void) {
+	static func verifyScriptFiles(completion: @escaping (Bool) -> Void) {
+		let group = DispatchGroup()
+		var error = false
+		
+		group.enter()
 		DispatchQueue.global(qos: .userInitiated).async {
 			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
 			let shellScript = path + "/GetProcessInfo.sh"
 			
 			guard FileManager.default.fileExists(atPath: shellScript) else {
-				completion(false)
+				error = true
+				group.leave()
 				return
 			}
 			
 			guard ((try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript))) != nil) else {
-				completion(false)
+				error = true
+				group.leave()
 				return
 			}
 			
-			completion(true)
+			group.leave()
+		}
+		
+		group.enter()
+		DispatchQueue.global(qos: .userInitiated).async {
+			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+			let shellScript = path + "/KillProcess.sh"
+			
+			guard FileManager.default.fileExists(atPath: shellScript) else {
+				error = true
+				group.leave()
+				return
+			}
+			
+			guard ((try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript))) != nil) else {
+				error = true
+				group.leave()
+				return
+			}
+			
+			group.leave()
+		}
+		
+		group.notify(queue: .main) {
+			completion(!error)
 		}
 	}
 	

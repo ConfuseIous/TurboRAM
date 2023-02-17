@@ -30,7 +30,7 @@ struct FinishSetupView: View {
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("chmod a+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/script.sh\"")
+			Text("chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\" && chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh\"")
 				.padding()
 				.font(.system(size: 10))
 				.background(.black)
@@ -38,13 +38,13 @@ struct FinishSetupView: View {
 			Button(action: {
 				let pasteboard = NSPasteboard.general
 				pasteboard.clearContents()
-				pasteboard.writeObjects(["chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\"" as NSString])
+				pasteboard.writeObjects(["chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\" && chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh\"" as NSString])
 			}, label: {
 				Text("Copy Command")
 			})
 			Spacer()
 			Button(action: {
-				MemoryInfoViewModel.verifyScriptFile(completion: { success in
+				MemoryInfoViewModel.verifyScriptFiles(completion: { success in
 					if success {
 						UserDefaults.standard.set(true, forKey: "setupCompleted")
 						shouldShowSetupSheet.toggle()
