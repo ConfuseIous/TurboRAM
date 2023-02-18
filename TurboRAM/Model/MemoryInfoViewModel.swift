@@ -13,6 +13,7 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	var initialValues: [Int : Float] = [:] // Dictionary allows for 0(1) lookup time instead of 0(n)
 	
+	@Published var isLoading: Bool = false
 	@Published var processes: [ProcessDetails] = []
 	@Published var offendingProcesses: [ProcessDetails] = []
 	@Published var ignoredProcessIDs: [Int] = []
@@ -72,6 +73,7 @@ class MemoryInfoViewModel: ObservableObject {
 	}
 	
 	func reloadMemoryInfo() {
+		isLoading = true
 		// Create new thread to run script
 		DispatchQueue.global(qos: .userInitiated).async {
 			guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
@@ -188,13 +190,15 @@ class MemoryInfoViewModel: ObservableObject {
 				 */
 				
 				DispatchQueue.main.async {
+					self.isLoading = false
 					self.processes = processes
+					self.findOffendingProcesses()
 				}
 			}
 		}
 	}
 	
-	func findOffendingProcesses() {
+	private func findOffendingProcesses() {
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
 			return (!ignoredProcessIDs.contains(where: {$0 == proc.id}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
@@ -247,7 +251,7 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	func getPermanentlyIgnoredProcessIDs() -> [Int] {
+	private func getPermanentlyIgnoredProcessIDs() -> [Int] {
 		var ignoredProcessIDs: [Int] = []
 		
 		let ignoredProcessNames = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
@@ -260,7 +264,7 @@ class MemoryInfoViewModel: ObservableObject {
 		return ignoredProcessIDs
 	}
 	
-	func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
+	private func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
 		if !processes.isEmpty {
 			var totalMemory: Float = 0.0
 			for process in processes {

@@ -26,7 +26,7 @@ struct HomeView: View {
 	
 	@State private var shouldShowQuitConfirmationAlert = false
 	
-	var memoryInfoViewModel = MemoryInfoViewModel()
+	@ObservedObject var memoryInfoViewModel = MemoryInfoViewModel()
 	
 	let formatter: NumberFormatter = {
 		let formatter = NumberFormatter()
@@ -94,10 +94,18 @@ struct HomeView: View {
 					.padding(.horizontal)
 				}
 			}.contentShape(Rectangle()) // Makes the entire area tappable
-			Table(memoryInfoViewModel.processes, selection: $selectedIndex) {
-				TableColumn("Name", value: \.processName)
-				TableColumn("Memory Used (Megabytes)") { Text(String($0.memoryUsage)) }
-				TableColumn("Process ID") { Text(String($0.id)) }
+			if memoryInfoViewModel.isLoading {
+				Spacer()
+				ProgressView()
+					.progressViewStyle(.circular)
+				Text("Loading")
+				Spacer()
+			} else {
+				Table(memoryInfoViewModel.processes, selection: $selectedIndex) {
+					TableColumn("Name", value: \.processName)
+					TableColumn("Memory Used (Megabytes)") { Text(String($0.memoryUsage)) }
+					TableColumn("Process ID") { Text(String($0.id)) }
+				}
 			}
 		}
 		.alert(isPresented: $shouldShowQuitConfirmationAlert) {
@@ -139,12 +147,11 @@ struct HomeView: View {
 			}
 		}
 		.onReceive(timer) { _ in
-			print("DEBUG: timer RECEIVED")
+			debugPrint("DEBUG: timer RECEIVED")
 			memoryInfoViewModel.reloadMemoryInfo()
-			memoryInfoViewModel.findOffendingProcesses()
 			if !memoryInfoViewModel.offendingProcesses.isEmpty {
 				shouldShowWarningSheet.toggle()
-				print("DEBUG: TOGGLED shouldShowWarningSheet")
+				debugPrint("DEBUG: TOGGLED shouldShowWarningSheet")
 			}
 		}
 		.onChange(of: checkingFrequency, perform: { _ in
