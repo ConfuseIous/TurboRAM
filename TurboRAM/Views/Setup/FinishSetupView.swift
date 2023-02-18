@@ -12,6 +12,8 @@ struct FinishSetupView: View {
 	@State private var shouldShowError = false
 	@Binding var shouldShowSetupSheet: Bool
 	
+	let memoryInfoViewModel: MemoryInfoViewModel
+	
 	var body: some View {
 		VStack {
 			Text("Great! The script has been saved.")
@@ -30,7 +32,7 @@ struct FinishSetupView: View {
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\" && chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh\"")
+			Text("chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh")
 				.padding()
 				.font(.system(size: 10))
 				.background(.black)
@@ -38,7 +40,7 @@ struct FinishSetupView: View {
 			Button(action: {
 				let pasteboard = NSPasteboard.general
 				pasteboard.clearContents()
-				pasteboard.writeObjects(["chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh\" && chmod u+x \"Library/Application Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh\"" as NSString])
+				pasteboard.writeObjects(["chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh" as NSString])
 			}, label: {
 				Text("Copy Command")
 			})
@@ -46,6 +48,7 @@ struct FinishSetupView: View {
 			Button(action: {
 				MemoryInfoViewModel.verifyScriptFiles(completion: { success in
 					if success {
+						memoryInfoViewModel.reloadMemoryInfo()
 						UserDefaults.standard.set(true, forKey: "setupCompleted")
 						shouldShowSetupSheet.toggle()
 					} else {
