@@ -18,7 +18,8 @@ struct MenuBarView: View {
 				Text("TurboRAM")
 					.font(.system(size: 20))
 				Spacer()
-			}
+			}.padding([.top, .horizontal])
+			Divider()
 			List(memoryInfoViewModel.processes) { process in
 				HStack {
 					Text(process.processName)
@@ -27,47 +28,43 @@ struct MenuBarView: View {
 				}
 			}
 			Divider()
-			Button(action: {
-				memoryInfoViewModel.reloadMemoryInfo()
-			}, label: {
-				HStack {
-					Text("Reload")
-						.foregroundColor(Color(nsColor: .labelColor))
-						.underline()
-					Spacer()
-				}
-			})
-			.keyboardShortcut("r")
-			.buttonStyle(.borderless)
-			Button(action: {
-				MainWindowManager.shared.showWindow()
-			}, label: {
-				HStack {
-					Text("Show Main Window")
-						.foregroundColor(Color(nsColor: .labelColor))
-						.underline()
-					Spacer()
-				}
-			})
-			.keyboardShortcut("s")
-			.buttonStyle(.borderless)
-			Button(action: {
-				
-			}, label: {
-				HStack {
-					Text("Quit")
-						.foregroundColor(Color(nsColor: .labelColor))
-						.underline()
-					Spacer()
-				}
-			})
-			.keyboardShortcut("q")
-			.buttonStyle(.borderless)
+			VStack {
+				Button(action: {
+					memoryInfoViewModel.reloadMemoryInfo()
+				}, label: {
+					HStack {
+						Text("Reload")
+							.foregroundColor(Color(nsColor: .labelColor))
+						Spacer()
+					}
+				})
+				.keyboardShortcut("r")
+				Button(action: {
+					MainWindowManager.shared.showWindow()
+				}, label: {
+					HStack {
+						Text("Show Main Window")
+							.foregroundColor(Color(nsColor: .labelColor))
+						Spacer()
+					}
+				})
+				.keyboardShortcut("s")
+				Button(action: {
+					NSApp.terminate(self)
+				}, label: {
+					HStack {
+						Text("Quit")
+							.foregroundColor(Color(nsColor: .labelColor))
+						Spacer()
+					}
+				})
+				.keyboardShortcut("q")
+			}.padding([.bottom, .horizontal], 10)
 		}
-		.padding()
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
 			memoryInfoViewModel.processes = memoryInfoViewModel.processes.filter({$0.memoryUsage >= 100})
 		}
+		.frame(height: 500)
 	}
 }
