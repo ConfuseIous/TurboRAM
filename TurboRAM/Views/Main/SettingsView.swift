@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingsView: View {
 	
 	@State private var shouldShowConfirmationAlert: Bool = false
+	@State private var hideViews: Bool = false // Hides other views to allow InfoView to take up more space
+	
 	@Binding var shouldShowSettingsSheet: Bool
 	
 	@State private var threshold: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
@@ -20,21 +22,21 @@ struct SettingsView: View {
 		VStack(spacing: 20) {
 			HStack {
 				Text("Settings")
-					.font(.system(size: 30))
+					.font(.system(size: 25))
 				Spacer()
 				Button(action: {
 					shouldShowSettingsSheet.toggle()
 				}, label: {
 					Text("Cancel")
 				}).padding(.leading)
-			}.padding(.bottom)
+			}
 			Divider()
 			VStack {
 				HStack {
 					Text("Ignore processes that use less than:")
 					Spacer()
 				}
-					TextField("", text: $threshold)
+				TextField("", text: $threshold)
 				HStack {
 					Text("MB of memory.")
 					Spacer()
@@ -62,9 +64,11 @@ struct SettingsView: View {
 					Spacer()
 				}
 			}.padding(.bottom)
-			InfoView()
-			ContactView()
-			IgnoredView()
+			InfoView(hideViews: $hideViews)
+			if !hideViews {
+				ContactView()
+				IgnoredView()
+			}
 			Spacer()
 			Button(action: {
 				let acceptableThresholdRange = 200.0...1000.0
@@ -121,7 +125,7 @@ struct SettingsView: View {
 	
 	struct InfoView: View {
 		
-		@State private var shouldExpand = false
+		@Binding var hideViews: Bool
 		
 		var body: some View {
 			ZStack {
@@ -130,7 +134,7 @@ struct SettingsView: View {
 				VStack {
 					Button(action: {
 						withAnimation {
-							shouldExpand.toggle()
+							hideViews.toggle()
 						}
 					}, label: {
 						HStack {
@@ -138,11 +142,11 @@ struct SettingsView: View {
 								.fontWeight(.bold)
 							Spacer()
 							Image(systemName: "chevron.right")
-								.rotationEffect(shouldExpand ? Angle(degrees: 90) : Angle(degrees: 0))
+								.rotationEffect(hideViews ? Angle(degrees: 90) : Angle(degrees: 0))
 						}
 					}).buttonStyle(.borderless)
 					Divider()
-					if shouldExpand {
+					if hideViews {
 						HStack {
 							Text("Why are TurboRAM's values different from those in activity monitor?")
 								.font(.system(size: 13))
@@ -156,7 +160,7 @@ struct SettingsView: View {
 					}
 				}
 				.padding()
-			}.frame(height: shouldExpand ? nil : 45)
+			}.frame(height: hideViews ? nil : 45)
 		}
 	}
 	
