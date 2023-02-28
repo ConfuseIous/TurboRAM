@@ -8,9 +8,7 @@
 import Foundation
 
 struct ProcessDetails: Identifiable, Equatable {
-	// id represents PID
 	var id: Int
 	var processName: String
 	var memoryUsage: Float
-//	var cpuUsage: Float
 }

@@ -13,4 +13,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		MainWindowManager.shared.showWindow()
 	}
 }
-
