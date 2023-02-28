@@ -74,8 +74,8 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	func reloadMemoryInfo() {
 		isLoading = true
-		// Create new thread to run script
-		DispatchQueue.global(qos: .userInitiated).async {
+		
+		let workItem = DispatchWorkItem {
 			guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
 				return
 			}
@@ -195,6 +195,14 @@ class MemoryInfoViewModel: ObservableObject {
 					self.findOffendingProcesses()
 				}
 			}
+		}
+		
+		// Create new thread to run script with max priority
+		DispatchQueue.global(qos: .userInteractive).async(execute: workItem)
+		
+		// Automatically quit task if it hasn't completed in 5 seconds
+		Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { timer in
+			workItem.cancel()
 		}
 	}
 	
