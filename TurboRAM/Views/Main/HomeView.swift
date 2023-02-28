@@ -147,11 +147,9 @@ struct HomeView: View {
 			}
 		}
 		.onReceive(timer) { _ in
-			debugPrint("DEBUG: timer RECEIVED")
 			memoryInfoViewModel.reloadMemoryInfo()
 			if !memoryInfoViewModel.offendingProcesses.isEmpty {
 				shouldShowWarningSheet.toggle()
-				debugPrint("DEBUG: TOGGLED shouldShowWarningSheet")
 			}
 		}
 		.onChange(of: checkingFrequency, perform: { _ in
