@@ -29,7 +29,7 @@
 /* Begin PBXFileReference section */
 		3C0D8D492982C27B00EBADE9 /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		3C2AB9D5298FB04900BC90B9 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
-		3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = GetProcessInfo.sh; sourceTree = SOURCE_ROOT; };
+		3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = GetProcessInfo.sh; path = TurboRAM/Scripts/GetProcessInfo.sh; sourceTree = SOURCE_ROOT; };
 		3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishSetupView.swift; sourceTree = "<group>"; };
 		3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupContainer.swift; sourceTree = "<group>"; };
 		3C5B8FD92929551F004AC381 /* ProcessDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessDetails.swift; sourceTree = "<group>"; };
@@ -105,6 +105,15 @@
 			path = "Menu Bar";
 			sourceTree = "<group>";
 		};
+		3C72104129AEC16800B56523 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */,
+				3C814212299E784500B6B568 /* KillProcess.sh */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
 		3CA3518F2939A7DA00E3735C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,11 +147,10 @@
 				3CA3518F2939A7DA00E3735C /* Views */,
 				3C6ED5A32996A19100096978 /* MainWindow */,
 				3C60D4F32921ED0200283F91 /* Model */,
+				3C72104129AEC16800B56523 /* Scripts */,
 				3C6ED59F2995EEA700096978 /* AppDelegate.swift */,
 				3CD43273291FBA000020B7FB /* Assets.xcassets */,
 				3CD43278291FBA000020B7FB /* TurboRAM.entitlements */,
-				3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */,
-				3C814212299E784500B6B568 /* KillProcess.sh */,
 				3CD43275291FBA000020B7FB /* Preview Content */,
 			);
 			path = TurboRAM;
@@ -392,7 +400,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.karandeepsingh.TurboRAM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -426,7 +435,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.karandeepsingh.TurboRAM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

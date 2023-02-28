@@ -12,6 +12,9 @@ struct MenuBarView: View {
 	
 	let memoryInfoViewModel = MemoryInfoViewModel()
 	
+	@AppStorage("checkingFrequency") private var checkingFrequency = UserDefaults.standard.double(forKey: "checkingFrequency")
+	@State private var timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
+	
 	var body: some View {
 		VStack {
 			HStack {
@@ -65,6 +68,12 @@ struct MenuBarView: View {
 			memoryInfoViewModel.reloadMemoryInfo()
 			memoryInfoViewModel.processes = memoryInfoViewModel.processes.filter({$0.memoryUsage >= 100})
 		}
+		.onReceive(timer) { _ in
+			memoryInfoViewModel.reloadMemoryInfo()
+		}
+		.onChange(of: checkingFrequency, perform: { _ in
+			self.timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
+		})
 		.frame(height: 500)
 	}
 }
