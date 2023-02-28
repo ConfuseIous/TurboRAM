@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MenuBarView: View {
 	
-	let memoryInfoViewModel = MemoryInfoViewModel()
+	@ObservedObject var memoryInfoViewModel = MemoryInfoViewModel()
 	
 	@AppStorage("checkingFrequency") private var checkingFrequency = UserDefaults.standard.double(forKey: "checkingFrequency")
 	@State private var timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
