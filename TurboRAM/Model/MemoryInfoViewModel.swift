@@ -16,10 +16,10 @@ class MemoryInfoViewModel: ObservableObject {
 	@Published var isLoading: Bool = false
 	@Published var processes: [ProcessDetails] = []
 	@Published var offendingProcesses: [ProcessDetails] = []
-	@Published var ignoredProcessIDs: [Int] = []
+//	@Published var ignoredProcessIDs: [Int] = []
 	
 	init() {
-		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
+//		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
 		self.reloadMemoryInfo()
 	}
 	
@@ -209,7 +209,7 @@ class MemoryInfoViewModel: ObservableObject {
 	private func findOffendingProcesses() {
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
-			return (!ignoredProcessIDs.contains(where: {$0 == proc.id}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
+			return (!getPermanentlyIgnoredProcessNames().contains(where: {$0 == proc.processName}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
 		}).compactMap { process in
 			guard let compared = initialValues[process.id], process.memoryUsage >= (compared * UserDefaults.standard.float(forKey: "minimumMemoryUsageMultiplier")) else { return nil }
 			return process
@@ -259,17 +259,19 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	private func getPermanentlyIgnoredProcessIDs() -> [Int] {
-		var ignoredProcessIDs: [Int] = []
+	private func getPermanentlyIgnoredProcessNames() -> [String] {
+		// var ignoredProcessIDs: [Int] = []
 		
-		let ignoredProcessNames = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
-		for name in ignoredProcessNames {
-			if let process = processes.first(where: {$0.processName == name}) {
-				ignoredProcessIDs.append(process.id)
-			}
-		}
+		// let ignoredProcessNames = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
+		// for name in ignoredProcessNames {
+		// 	if let process = processes.first(where: {$0.processName == name}) {
+		// 		ignoredProcessIDs.append(process.id)
+		// 	}
+		// }
 		
-		return ignoredProcessIDs
+		// return ignoredProcessIDs
+
+		return UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
 	}
 	
 	private func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {

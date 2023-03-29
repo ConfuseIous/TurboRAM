@@ -74,7 +74,7 @@ struct WarningView: View {
 							//						})
 							Button(action: {
 								if let index = memoryInfoViewModel.offendingProcesses.firstIndex(where: {$0.id == process.id}) {
-									memoryInfoViewModel.ignoredProcessIDs.append(process.id)
+									// memoryInfoViewModel.ignoredProcessIDs.append(process.id)
 									var ignoredProcessNames: [String] = (UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? [])
 									ignoredProcessNames.append(process.processName)
 									UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
