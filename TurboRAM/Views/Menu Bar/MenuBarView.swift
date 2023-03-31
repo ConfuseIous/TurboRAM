@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct MenuBarView: View {
 	
@@ -14,6 +15,25 @@ struct MenuBarView: View {
 	
 	@AppStorage("checkingFrequency") private var checkingFrequency = UserDefaults.standard.double(forKey: "checkingFrequency")
 	@State private var timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
+	
+	func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
+		if !processes.isEmpty {
+			var totalMemory: Float = 0.0
+			for process in processes {
+				totalMemory += process.memoryUsage
+			}
+			
+			let content = UNMutableNotificationContent()
+			content.title = "You can free \(totalMemory)MB of RAM"
+			content.subtitle = (processes.count == 1) ? "1 process is hogging your computer's memory" : "\(processes.count) processes are hogging your computer's memory"
+			content.sound = UNNotificationSound.default
+			
+			let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+			let request = UNNotificationRequest(identifier: "MemoryWarning", content: content, trigger: trigger)
+			
+			UNUserNotificationCenter.current().add(request)
+		}
+	}
 	
 	var body: some View {
 		VStack {
@@ -66,7 +86,7 @@ struct MenuBarView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-			memoryInfoViewModel.processes = memoryInfoViewModel.processes.filter({$0.memoryUsage >= 100})
+			sendNotificationForOffendingProcesses(processes: memoryInfoViewModel.findOffendingProcesses())
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()

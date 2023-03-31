@@ -15,11 +15,10 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	@Published var isLoading: Bool = false
 	@Published var processes: [ProcessDetails] = []
-	@Published var offendingProcesses: [ProcessDetails] = []
-//	@Published var ignoredProcessIDs: [Int] = []
+	//	@Published var ignoredProcessIDs: [Int] = []
 	
 	init() {
-//		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
+		//		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
 		self.reloadMemoryInfo()
 	}
 	
@@ -192,7 +191,6 @@ class MemoryInfoViewModel: ObservableObject {
 				DispatchQueue.main.async {
 					self.isLoading = false
 					self.processes = processes
-					self.findOffendingProcesses()
 				}
 			}
 		}
@@ -206,7 +204,7 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	private func findOffendingProcesses() {
+	func findOffendingProcesses() -> [ProcessDetails] {
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
 			return (!getPermanentlyIgnoredProcessNames().contains(where: {$0 == proc.processName}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
@@ -215,11 +213,7 @@ class MemoryInfoViewModel: ObservableObject {
 			return process
 		}
 		
-		self.offendingProcesses = commonProcesses
-		print("FOUND \(self.offendingProcesses.count) OFFENDING PROCESSES")
-		DispatchQueue.main.async {
-			self.sendNotificationForOffendingProcesses(processes: self.offendingProcesses)
-		}
+		return commonProcesses
 	}
 	
 	func quitProcessWithPID(pid: Int) {
@@ -260,36 +254,6 @@ class MemoryInfoViewModel: ObservableObject {
 	}
 	
 	private func getPermanentlyIgnoredProcessNames() -> [String] {
-		// var ignoredProcessIDs: [Int] = []
-		
-		// let ignoredProcessNames = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
-		// for name in ignoredProcessNames {
-		// 	if let process = processes.first(where: {$0.processName == name}) {
-		// 		ignoredProcessIDs.append(process.id)
-		// 	}
-		// }
-		
-		// return ignoredProcessIDs
-
 		return UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
-	}
-	
-	private func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
-		if !processes.isEmpty {
-			var totalMemory: Float = 0.0
-			for process in processes {
-				totalMemory += process.memoryUsage
-			}
-			
-			let content = UNMutableNotificationContent()
-			content.title = "You can free \(totalMemory)MB of RAM"
-			content.subtitle = (processes.count == 1) ? "1 process is hogging your computer's memory" : "\(processes.count) processes are hogging your computer's memory"
-			content.sound = UNNotificationSound.default
-			
-			let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-			let request = UNNotificationRequest(identifier: "MemoryWarning", content: content, trigger: trigger)
-			
-			UNUserNotificationCenter.current().add(request)
-		}
 	}
 }
