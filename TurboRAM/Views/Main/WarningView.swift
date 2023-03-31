@@ -14,7 +14,9 @@ struct WarningView: View {
 	
 	@Binding var shouldShowWarningSheet: Bool
 	
-	var memoryInfoViewModel: MemoryInfoViewModel
+	@Binding var  offendingProcesses: [ProcessDetails]
+	
+	let memoryInfoViewModel: MemoryInfoViewModel
 	
 	let formatter: NumberFormatter = {
 		let formatter = NumberFormatter()
@@ -36,13 +38,13 @@ struct WarningView: View {
 				}).padding(.leading)
 			}.padding(.bottom)
 			Divider()
-			if memoryInfoViewModel.offendingProcesses.isEmpty {
+			if offendingProcesses.isEmpty {
 				Spacer()
 				Text("No Processes")
 					.font(.system(size: 25))
 					.foregroundColor(.secondary)
 			} else {
-				List(memoryInfoViewModel.offendingProcesses) { process in
+				List(offendingProcesses) { process in
 					ZStack {
 						RoundedRectangle(cornerRadius: 10)
 							.foregroundColor(Color(nsColor: .windowBackgroundColor))
@@ -53,9 +55,9 @@ struct WarningView: View {
 								Text("Current Usage: \(Int(process.memoryUsage))MB")
 							}
 							Button(action: {
-								if let index = memoryInfoViewModel.offendingProcesses.firstIndex(where: {$0.id == process.id}) {
+								if let index = offendingProcesses.firstIndex(where: {$0.id == process.id}) {
 									memoryInfoViewModel.quitProcessWithPID(pid: process.id)
-									memoryInfoViewModel.offendingProcesses.remove(at: index)
+									offendingProcesses.remove(at: index)
 									memoryInfoViewModel.reloadMemoryInfo()
 								}
 							}, label: {
@@ -73,14 +75,14 @@ struct WarningView: View {
 							//							Spacer()
 							//						})
 							Button(action: {
-								if let index = memoryInfoViewModel.offendingProcesses.firstIndex(where: {$0.id == process.id}) {
+								if let index = offendingProcesses.firstIndex(where: {$0.id == process.id}) {
 									// memoryInfoViewModel.ignoredProcessIDs.append(process.id)
 									var ignoredProcessNames: [String] = (UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? [])
 									ignoredProcessNames.append(process.processName)
 									UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
 									
 									withAnimation {
-										memoryInfoViewModel.offendingProcesses.remove(at: index)
+										offendingProcesses.remove(at: index)
 										memoryInfoViewModel.reloadMemoryInfo()
 									}
 								}

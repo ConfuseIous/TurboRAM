@@ -66,7 +66,7 @@ struct MenuBarView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-			memoryInfoViewModel.processes = memoryInfoViewModel.processes.filter({$0.memoryUsage >= 100})
+			memoryInfoViewModel.sendNotificationForOffendingProcesses(processes: memoryInfoViewModel.findOffendingProcesses())
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()

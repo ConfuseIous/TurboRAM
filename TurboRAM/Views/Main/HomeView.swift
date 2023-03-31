@@ -26,6 +26,8 @@ struct HomeView: View {
 	
 	@State private var shouldShowQuitConfirmationAlert = false
 	
+	@State private var offendingProcesses: [ProcessDetails] = []
+	
 	@ObservedObject var memoryInfoViewModel = MemoryInfoViewModel()
 	
 	let formatter: NumberFormatter = {
@@ -148,7 +150,8 @@ struct HomeView: View {
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()
-			if !memoryInfoViewModel.offendingProcesses.isEmpty {
+			offendingProcesses = memoryInfoViewModel.findOffendingProcesses()
+			if offendingProcesses.isEmpty {
 				shouldShowWarningSheet.toggle()
 			}
 		}
@@ -167,7 +170,7 @@ struct HomeView: View {
 			SettingsView(shouldShowSettingsSheet: $shouldShowSettingsSheet)
 		})
 		.sheet(isPresented: $shouldShowWarningSheet, content: {
-			WarningView(shouldShowWarningSheet: $shouldShowWarningSheet, memoryInfoViewModel: memoryInfoViewModel)
+			WarningView(shouldShowWarningSheet: $shouldShowWarningSheet, offendingProcesses: $offendingProcesses, memoryInfoViewModel: memoryInfoViewModel)
 		})
 		.padding()
 		.fixedSize(horizontal: true, vertical: false)
