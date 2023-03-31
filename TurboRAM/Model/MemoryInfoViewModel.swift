@@ -256,23 +256,4 @@ class MemoryInfoViewModel: ObservableObject {
 	private func getPermanentlyIgnoredProcessNames() -> [String] {
 		return UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
 	}
-	
-	func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
-		if !processes.isEmpty {
-			var totalMemory: Float = 0.0
-			for process in processes {
-				totalMemory += process.memoryUsage
-			}
-			
-			let content = UNMutableNotificationContent()
-			content.title = "You can free \(totalMemory)MB of RAM"
-			content.subtitle = (processes.count == 1) ? "1 process is hogging your computer's memory" : "\(processes.count) processes are hogging your computer's memory"
-			content.sound = UNNotificationSound.default
-			
-			let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-			let request = UNNotificationRequest(identifier: "MemoryWarning", content: content, trigger: trigger)
-			
-			UNUserNotificationCenter.current().add(request)
-		}
-	}
 }
