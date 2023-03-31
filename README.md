@@ -8,7 +8,7 @@ TurboRAM efficiently monitors all processes running on your system, immediately 
 TurboRAM exists only to help your computer run smoothly. It does not track you or share any data. In fact, TurboRAM does not even connect to the internet at all. I built this app to solve a problem that I see people facing every day. I am not interested in your data, and I don't like unnecessary tracking.
 
 ## – SUPPORT –
-All feedback is taken into consideration to continually improve your experience, and emails are answered within 24 hours at most. You can contact me at apps.karandeepsingh@icloud.com. I develop multiple apps so make sure to mention that your email is in regard to TurboRAM.
+I take all feedback consideration to continually improve your experience, and answer emails within 24 hours at most. You can email me at [turboram@ksapps.com](mailto:turboram@ksapps.com). I develop multiple apps so make sure to mention that your email is in regard to TurboRAM.
 
 ## - SCREENSHOTS -
 <img width="400" alt="image" src="https://user-images.githubusercontent.com/46585033/221367168-5c02336c-8aed-430f-9765-2804aa536e67.png">
