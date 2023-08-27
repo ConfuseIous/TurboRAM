@@ -17,6 +17,7 @@ struct MenuBarView: View {
 	@State private var timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
 	
 	func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
+		// This function exists only in the Menu Bar to prevent duplicate notifications being sent
 		if !processes.isEmpty {
 			var totalMemory: Float = 0.0
 			for process in processes {
