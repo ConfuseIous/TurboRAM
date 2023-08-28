@@ -17,6 +17,7 @@ struct MenuBarView: View {
 	@State private var timer = Timer.publish(every: UserDefaults.standard.double(forKey: "checkingFrequency"), on: .main, in: .common).autoconnect()
 	
 	func sendNotificationForOffendingProcesses(processes: [ProcessDetails]) {
+		// This function exists only in the Menu Bar to prevent duplicate notifications being sent
 		if !processes.isEmpty {
 			var totalMemory: Float = 0.0
 			for process in processes {
@@ -43,6 +44,7 @@ struct MenuBarView: View {
 				Spacer()
 			}.padding([.top, .horizontal])
 			Divider()
+				.padding(.horizontal)
 			List(memoryInfoViewModel.processes) { process in
 				HStack {
 					Text(process.processName)
@@ -51,7 +53,8 @@ struct MenuBarView: View {
 				}
 			}
 			Divider()
-			VStack {
+				.padding(.horizontal)
+			VStack(spacing: 5) {
 				Button(action: {
 					memoryInfoViewModel.reloadMemoryInfo()
 				}, label: {
@@ -59,9 +62,17 @@ struct MenuBarView: View {
 						Text("Reload")
 							.foregroundColor(Color(nsColor: .labelColor))
 						Spacer()
+						HStack(spacing: 4) {
+							Image(systemName: "command")
+								.foregroundColor(.secondary)
+							Text("R")
+								.foregroundColor(.secondary)
+						}
 					}
 				})
 				.keyboardShortcut("r")
+				.buttonStyle(.plain)
+				.foregroundColor(Color(nsColor: .windowBackgroundColor))
 				Button(action: {
 					MainWindowManager.shared.showWindow()
 				}, label: {
@@ -69,9 +80,17 @@ struct MenuBarView: View {
 						Text("Show Main Window")
 							.foregroundColor(Color(nsColor: .labelColor))
 						Spacer()
+						HStack(spacing: 4) {
+							Image(systemName: "command")
+								.foregroundColor(.secondary)
+							Text("S")
+								.foregroundColor(.secondary)
+						}
 					}
 				})
 				.keyboardShortcut("s")
+				.buttonStyle(.plain)
+				.foregroundColor(Color(nsColor: .windowBackgroundColor))
 				Button(action: {
 					NSApp.terminate(self)
 				}, label: {
@@ -79,10 +98,20 @@ struct MenuBarView: View {
 						Text("Quit")
 							.foregroundColor(Color(nsColor: .labelColor))
 						Spacer()
+						HStack(spacing: 4) {
+							Image(systemName: "command")
+								.foregroundColor(.secondary)
+							Text("Q")
+								.foregroundColor(.secondary)
+						}
 					}
 				})
 				.keyboardShortcut("q")
-			}.padding([.bottom, .horizontal], 10)
+				.buttonStyle(.plain)
+				.foregroundColor(Color(nsColor: .windowBackgroundColor))
+			}
+			.padding(.horizontal, 15)
+			.padding(.bottom, 10)
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()

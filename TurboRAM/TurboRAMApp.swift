@@ -22,10 +22,8 @@ struct TurboRAMApp: App {
 	}
 	
 	var body: some Scene {
-		MenuBarExtra(content: {
+		MenuBarExtra("TurboRAM", systemImage: "cpu") {
 			MenuBarView()
-		}, label: {
-			Image(systemName: "cpu")
-		}).menuBarExtraStyle(.window)
+		}.menuBarExtraStyle(.window)
 	}
 }

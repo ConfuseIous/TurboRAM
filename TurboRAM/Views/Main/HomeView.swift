@@ -151,7 +151,7 @@ struct HomeView: View {
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()
 			offendingProcesses = memoryInfoViewModel.findOffendingProcesses()
-			if offendingProcesses.isEmpty {
+			if !offendingProcesses.isEmpty {
 				shouldShowWarningSheet.toggle()
 			}
 		}
