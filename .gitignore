@@ -25,5 +25,29 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-#Prepros
-prepros.config
+# Xcode
+UserInterfaceState.xcuserstate
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Web
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
