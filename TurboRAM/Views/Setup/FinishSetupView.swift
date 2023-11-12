@@ -15,24 +15,24 @@ struct FinishSetupView: View {
 	let memoryInfoViewModel: MemoryInfoViewModel
 	
 	var body: some View {
-		VStack {
-			Text("Great! The script has been saved.")
+		VStack(spacing: 20) {
+			Text("Great! The scripts have been saved.")
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("Next, it needs permission to run.")
+			Text("Next, they need permission to run.")
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("Before proceeding, you are highly encouraged to first read the script and understand that it is safe to run.")
+			Text("Before proceeding, you may first read the scripts and understand that they are safe to run.")
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("To grant permission, open a new Terminal window and run this command:")
+			Text("To grant permission, open a new Terminal window and run these commands:")
 				.font(.system(size: 15))
 				.multilineTextAlignment(.center)
 				.padding()
-			Text("chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh")
+			Text("chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh && && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetMemoryPressure.sh")
 				.padding()
 				.font(.system(size: 10))
 				.background(.black)
@@ -40,7 +40,7 @@ struct FinishSetupView: View {
 			Button(action: {
 				let pasteboard = NSPasteboard.general
 				pasteboard.clearContents()
-				pasteboard.writeObjects(["chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh" as NSString])
+				pasteboard.writeObjects(["chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetProcessInfo.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/KillProcess.sh && chmod u+x ~/Library/Application\\ Scripts/com.karandeepsingh.TurboRAM/GetMemoryPressure.sh" as NSString])
 			}, label: {
 				Text("Copy Command")
 			})
@@ -69,7 +69,7 @@ struct FinishSetupView: View {
 		.alert(isPresented: $shouldShowError, content: {
 			Alert(
 				title: Text("Something went wrong"),
-				message: Text("Please give the script permission to be executed.")
+				message: Text("Please give the scripts permission to be executed.")
 			)
 		})
 	}

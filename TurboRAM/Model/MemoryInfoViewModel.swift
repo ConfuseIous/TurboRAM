@@ -15,10 +15,8 @@ class MemoryInfoViewModel: ObservableObject {
 	
 	@Published var isLoading: Bool = false
 	@Published var processes: [ProcessDetails] = []
-	//	@Published var ignoredProcessIDs: [Int] = []
 	
 	init() {
-		//		self.ignoredProcessIDs = getPermanentlyIgnoredProcessIDs()
 		self.reloadMemoryInfo()
 	}
 	
@@ -204,7 +202,12 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	func findOffendingProcesses() -> [ProcessDetails] {
+	func findOffendingProcesses() async -> [ProcessDetails] {
+		// Don't bother the user unless memory pressure is actually high
+		if let memPressure = await self.getMemoryPressure(), memPressure < 75 {
+			return []
+		}
+		
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
 			return (!getPermanentlyIgnoredProcessNames().contains(where: {$0 == proc.processName}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
@@ -250,6 +253,61 @@ class MemoryInfoViewModel: ObservableObject {
 			
 			let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
 			print(output)
+		}
+	}
+	
+	func getMemoryPressure() async -> Int? {
+		print("getMemoryPressure")
+		
+		guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
+			return nil
+		}
+		
+		let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+		let shellScript = path + "/GetMemoryPressure.sh"
+		
+		// Show an error if the script doesn't exist
+		guard FileManager.default.fileExists(atPath: shellScript) else {
+			print("Script not found at \(shellScript)")
+			return nil
+		}
+		
+		// Use NSUserUnixTask to run the script
+		guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+			return nil
+		}
+		
+		// Get the output of the script to a variable
+		let pipe = Pipe()
+		unixScript.standardOutput = pipe.fileHandleForWriting
+		
+		func execute(completion: @escaping (Int?)->()) {
+			unixScript.execute(withArguments: []) { error in
+				if let error {
+					print("Failed: ", error)
+					return
+				}
+				
+				let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
+				
+				let outputArr = output.components(separatedBy: "\n").filter({$0.trimmingCharacters(in: .whitespacesAndNewlines) != ""})
+				
+				// The memory pressure is the very last word of the last line
+				let lineComponents = outputArr[outputArr.count - 1].components(separatedBy: " ")
+				
+				// Remove % symbol
+				guard let freeMemory = Int(lineComponents[lineComponents.count - 1].dropLast()) else {
+					return
+				}
+				
+				completion(100 - freeMemory)
+			}
+		}
+		
+		return await withCheckedContinuation { continuation in
+			execute(completion: { int in
+				continuation.resume(returning: int)
+			})
 		}
 	}
 	

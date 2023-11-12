@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3C0D8D4A2982C27B00EBADE9 /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D8D492982C27B00EBADE9 /* WarningView.swift */; };
 		3C2AB9D6298FB04900BC90B9 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D5298FB04900BC90B9 /* SetupView.swift */; };
-		3C2AB9DA298FB89B00BC90B9 /* GetProcessInfo.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */; };
 		3C2AB9DD298FD90800BC90B9 /* FinishSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9DC298FD90800BC90B9 /* FinishSetupView.swift */; };
 		3C2AB9DF298FE0E500BC90B9 /* SetupContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2AB9DE298FE0E500BC90B9 /* SetupContainer.swift */; };
 		3C5B8FDA2929551F004AC381 /* ProcessDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5B8FD92929551F004AC381 /* ProcessDetails.swift */; };
@@ -17,7 +16,9 @@
 		3C6ED59E2995EE1500096978 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6ED59D2995EE1500096978 /* MainWindow.swift */; };
 		3C6ED5A02995EEA700096978 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6ED59F2995EEA700096978 /* AppDelegate.swift */; };
 		3C6ED5A229969C2200096978 /* MainWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6ED5A129969C2200096978 /* MainWindowManager.swift */; };
-		3C814213299E784500B6B568 /* KillProcess.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C814212299E784500B6B568 /* KillProcess.sh */; };
+		3C7B54482B00C2DB008B6A97 /* GetProcessInfo.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */; };
+		3C7B54492B00C2DB008B6A97 /* KillProcess.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C814212299E784500B6B568 /* KillProcess.sh */; };
+		3C7B544C2B00C5BD008B6A97 /* GetMemoryPressure.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3C7B544B2B00C5BD008B6A97 /* GetMemoryPressure.sh */; };
 		3CA351912939A7E900E3735C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA351902939A7E900E3735C /* SettingsView.swift */; };
 		3CB5E64F298580520032D906 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB5E64E298580520032D906 /* MenuBarView.swift */; };
 		3CD43270291FB9FF0020B7FB /* TurboRAMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD4326F291FB9FF0020B7FB /* TurboRAMApp.swift */; };
@@ -37,6 +38,7 @@
 		3C6ED59D2995EE1500096978 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		3C6ED59F2995EEA700096978 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C6ED5A129969C2200096978 /* MainWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowManager.swift; sourceTree = "<group>"; };
+		3C7B544B2B00C5BD008B6A97 /* GetMemoryPressure.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = GetMemoryPressure.sh; sourceTree = "<group>"; };
 		3C814212299E784500B6B568 /* KillProcess.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = KillProcess.sh; sourceTree = "<group>"; };
 		3CA351902939A7E900E3735C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3CB5E64E298580520032D906 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				3C2AB9D9298FB89B00BC90B9 /* GetProcessInfo.sh */,
 				3C814212299E784500B6B568 /* KillProcess.sh */,
+				3C7B544B2B00C5BD008B6A97 /* GetMemoryPressure.sh */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -226,9 +229,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C7B544C2B00C5BD008B6A97 /* GetMemoryPressure.sh in Resources */,
+				3C7B54482B00C2DB008B6A97 /* GetProcessInfo.sh in Resources */,
+				3C7B54492B00C2DB008B6A97 /* KillProcess.sh in Resources */,
 				3CD43277291FBA000020B7FB /* Preview Assets.xcassets in Resources */,
-				3C2AB9DA298FB89B00BC90B9 /* GetProcessInfo.sh in Resources */,
-				3C814213299E784500B6B568 /* KillProcess.sh in Resources */,
 				3CD43274291FBA000020B7FB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -401,7 +405,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.karandeepsingh.TurboRAM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -436,7 +440,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.karandeepsingh.TurboRAM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -65,6 +65,7 @@ struct SetupView: View {
 						Text("These scripts will be stored in:")
 						Text("~/Library/Application Scripts/com.karandeepsingh.TurboRAM")
 							.font(.system(size: 10))
+							.monospaced()
 							.padding()
 							.background(.black)
 							.foregroundColor(.white)
@@ -72,12 +73,21 @@ struct SetupView: View {
 						Text("This script returns a sorted list of system processes:")
 						Text("top -o mem -l 1 -stats \"command,mem,pid\"")
 							.font(.system(size: 10))
+							.monospaced()
 							.padding()
 							.background(.black)
 							.foregroundColor(.white)
 						Text("This one kills the selected process:")
 						Text("kill -9 $1")
 							.font(.system(size: 10))
+							.monospaced()
+							.padding()
+							.background(.black)
+							.foregroundColor(.white)
+						Text("This one checks memory pressure:")
+						Text("memory_pressure")
+							.font(.system(size: 10))
+							.monospaced()
 							.padding()
 							.background(.black)
 							.foregroundColor(.white)
@@ -98,6 +108,11 @@ struct SetupView: View {
 								
 								fileURL = folderURL.appendingPathComponent("KillProcess.sh").path
 								file = URL(fileURLWithPath: Bundle.main.path(forResource: "KillProcess", ofType: "sh")!)
+								data = try Data(contentsOf: file)
+								try data.write(to: URL(fileURLWithPath: fileURL))
+								
+								fileURL = folderURL.appendingPathComponent("GetMemoryPressure.sh").path
+								file = URL(fileURLWithPath: Bundle.main.path(forResource: "GetMemoryPressure", ofType: "sh")!)
 								data = try Data(contentsOf: file)
 								try data.write(to: URL(fileURLWithPath: fileURL))
 								
