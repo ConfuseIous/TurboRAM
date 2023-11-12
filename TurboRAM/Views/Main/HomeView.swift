@@ -132,6 +132,7 @@ struct HomeView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
+			memoryInfoViewModel.getMemoryPressure()
 			
 			UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
 				if success {
