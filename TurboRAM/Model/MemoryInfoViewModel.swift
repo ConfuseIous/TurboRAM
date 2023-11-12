@@ -251,35 +251,32 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	func getMemoryPressure() {
+	func getMemoryPressure() async -> Int? {
 		print("getMemoryPressure")
 		
-		let workItem = DispatchWorkItem {
-			guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
-				return
-			}
-
-			let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
-			let shellScript = path + "/GetMemoryPressure.sh"
-			
-			print("still here")
-			
-			// Show an error if the script doesn't exist
-			guard FileManager.default.fileExists(atPath: shellScript) else {
-				print("Script not found at \(shellScript)")
-				return
-			}
-			
-			// Use NSUserUnixTask to run the script
-			guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
-				print("NSUserUnixTask creation failed")
-				return
-			}
-			
-			// Get the output of the script to a variable
-			let pipe = Pipe()
-			unixScript.standardOutput = pipe.fileHandleForWriting
-			
+		guard !NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true).isEmpty else {
+			return nil
+		}
+		
+		let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.applicationScriptsDirectory, .userDomainMask, true)[0]
+		let shellScript = path + "/GetMemoryPressure.sh"
+		
+		// Show an error if the script doesn't exist
+		guard FileManager.default.fileExists(atPath: shellScript) else {
+			print("Script not found at \(shellScript)")
+			return nil
+		}
+		
+		// Use NSUserUnixTask to run the script
+		guard let unixScript = try? NSUserUnixTask(url: URL(fileURLWithPath: shellScript)) else {
+			return nil
+		}
+		
+		// Get the output of the script to a variable
+		let pipe = Pipe()
+		unixScript.standardOutput = pipe.fileHandleForWriting
+		
+		func execute(completion: @escaping (Int?)->()) {
 			unixScript.execute(withArguments: []) { error in
 				if let error {
 					print("Failed: ", error)
@@ -288,11 +285,24 @@ class MemoryInfoViewModel: ObservableObject {
 				
 				let output = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8)!
 				
-				print(output)
+				let outputArr = output.components(separatedBy: "\n").filter({$0.trimmingCharacters(in: .whitespacesAndNewlines) != ""})
 				
-				let outputArr = output.components(separatedBy: "\n")
-				print(outputArr[outputArr.count])
+				// The memory pressure is the very last word of the last line
+				let lineComponents = outputArr[outputArr.count - 1].components(separatedBy: " ")
+				
+				// Remove % symbol
+				guard let freeMemory = Int(lineComponents[lineComponents.count - 1].dropLast()) else {
+					return
+				}
+				
+				completion(100 - freeMemory)
 			}
+		}
+		
+		return await withCheckedContinuation { continuation in
+			execute(completion: { int in
+				continuation.resume(returning: int)
+			})
 		}
 	}
 	
