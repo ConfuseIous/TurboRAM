@@ -48,7 +48,7 @@ struct HomeView: View {
 						Spacer()
 					}
 					HStack {
-						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageMultiplier as NSNumber) ?? "unknown") times the memory it was using when it was first tracked and is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
+						Text("TurboRAM will alert you if any process uses \(formatter.string(from: minimumMemoryUsageMultiplier as NSNumber) ?? "unknown") times the memory it was using when it was first tracked, is now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more, and your Mac is running out of memory.")
 							.font(.system(size: 12))
 							.foregroundColor(.secondary)
 						Spacer()
@@ -133,10 +133,6 @@ struct HomeView: View {
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
 			
-			Task {
-				print(await memoryInfoViewModel.getMemoryPressure())
-			}
-			
 			UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
 				if success {
 					print("Notification permission granted")
@@ -154,9 +150,11 @@ struct HomeView: View {
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()
-			offendingProcesses = memoryInfoViewModel.findOffendingProcesses()
-			if !offendingProcesses.isEmpty {
-				shouldShowWarningSheet.toggle()
+			Task {
+				offendingProcesses = await memoryInfoViewModel.findOffendingProcesses()
+				if !offendingProcesses.isEmpty {
+					shouldShowWarningSheet.toggle()
+				}
 			}
 		}
 		.onChange(of: checkingFrequency, perform: { _ in

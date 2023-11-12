@@ -115,7 +115,8 @@ struct MenuBarView: View {
 		}
 		.onAppear() {
 			memoryInfoViewModel.reloadMemoryInfo()
-			sendNotificationForOffendingProcesses(processes: memoryInfoViewModel.findOffendingProcesses())
+			// Not sure if this is useful
+			// sendNotificationForOffendingProcesses(processes: memoryInfoViewModel.findOffendingProcesses())
 		}
 		.onReceive(timer) { _ in
 			memoryInfoViewModel.reloadMemoryInfo()

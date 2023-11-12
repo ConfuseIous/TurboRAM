@@ -202,7 +202,12 @@ class MemoryInfoViewModel: ObservableObject {
 		}
 	}
 	
-	func findOffendingProcesses() -> [ProcessDetails] {
+	func findOffendingProcesses() async -> [ProcessDetails] {
+		// Don't bother the user unless memory pressure is actually high
+		if let memPressure = await self.getMemoryPressure(), memPressure < 75 {
+			return []
+		}
+		
 		let commonProcesses: [ProcessDetails] = processes.filter({
 			let proc = $0
 			return (!getPermanentlyIgnoredProcessNames().contains(where: {$0 == proc.processName}) && $0.memoryUsage >= UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))

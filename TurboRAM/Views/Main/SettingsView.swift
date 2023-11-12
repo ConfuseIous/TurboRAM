@@ -156,7 +156,18 @@ struct SettingsView: View {
 							Text("Activity Monitor uses the virtual memory size of a process, which includes both the physical memory (RAM) used by the process and any additional space reserved for the process in the swap file. TurboRAM shows the resident size of a process, which is the amount of physical memory (RAM) being used by the process only.")
 								.font(.system(size: 12))
 							Spacer()
+						}.padding(.top, 4)
+						HStack {
+							Text("Why is TurboRAM not notifying me?")
+								.font(.system(size: 13))
+							Spacer()
+						}.padding(.top, 8)
+						HStack {
+							Text("TurboRAM will only notify you if a process meets the thresholds you've set and your Mac is also running out of memory. Under normal conditions, it should never bother you.")
+								.font(.system(size: 12))
+							Spacer()
 						}.padding(.top, 5)
+
 					}
 				}
 				.padding()
