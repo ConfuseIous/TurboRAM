@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TurboRAM - Smart RAM Management for Your Mac</title>
+    <style>
+        :root {
+            --primary-color: #2D3748;
+            --accent-color: #4A5568;
+            --background-color: #F7FAFC;
+            --text-color: #1A202C;
+            --highlight-color: #3182CE;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1,
+        h2 {
+            color: var(--primary-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E2E8F0;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #EBF4FF, var(--background-color));
+            border-radius: 12px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card h3 {
+            color: var(--highlight-color);
+            margin-top: 0;
+        }
+
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .screenshot {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #E2E8F0;
+            color: var(--accent-color);
+        }
+
+        a {
+            color: var(--highlight-color);
+            text-decoration: none;
+            border-bottom: 1px solid currentColor;
+            transition: opacity 0.2s ease;
+        }
+
+        a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="hero">
+            <h1>TurboRAM</h1>
+            <p>Always running out of RAM? TurboRAM is the solution.</p>
+            <p>Efficient memory monitoring for your Mac, right from the menu bar.</p>
+        </header>
+
+        <section class="section">
+            <h2>HOW IT WORKS</h2>
+            <p>TurboRAM efficiently monitors all processes running on your system, immediately alerting you to any
+                significant changes in memory usage. Just define the threshold to be notified at, and TurboRAM keeps an
+                eye on RAM usage for you.</p>
+        </section>
+
+        <section class="section">
+            <h2>FEATURES</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Customizable</h3>
+                    <p>Set your own RAM threshold and refresh frequency to match your needs</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Menu Bar App</h3>
+                    <p>Always accessible but never in your way - right in your menu bar</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Optimized</h3>
+                    <p>Built for efficiency with minimal system impact</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Privacy-First</h3>
+                    <p>Zero tracking, zero data collection, zero internet connection needed</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>SCREENSHOTS</h2>
+            <div class="screenshots">
+                <div class="screenshot">
+                    <img src="1.png" alt="TurboRAM Screenshot 1" />
+                </div>
+                <div class="screenshot">
+                    <img src="2.png" alt="TurboRAM Screenshot 2" />
+                </div>
+                <div class="screenshot">
+                    <img src="3.png" alt="TurboRAM Screenshot 3" />
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>PRIVACY POLICY</h2>
+            <p>TurboRAM exists only to help your computer run smoothly. It does not track you, share any data, or even
+                connect to the internet. I built this app to solve a problem that I see people facing every day. I am
+                not interested in your data, and I don't like unnecessary tracking.</p>
+        </section>
+
+        <section class="section">
+            <h2>SUPPORT</h2>
+            <p>I take all feedback into consideration to continually improve your experience, and answer emails within
+                24 hours at most. You can email me at <a href="mailto:turboram@ksapps.com">turboram@ksapps.com</a>.</p>
+        </section>
+
+        <section class="section">
+            <h2>CONTRIBUTING</h2>
+            <p>If you want to improve the app, feel free to submit a PR and I'll have a look! The project is open to
+                community contributions.</p>
+        </section>
+
+        <footer class="footer">
+            &copy; 2025 <a href="https://ksapps.com">Karandeep Singh</a>
+        </footer>
+    </div>
+</body>
+
+</html>
