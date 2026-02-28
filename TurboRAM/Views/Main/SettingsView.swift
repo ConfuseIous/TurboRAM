@@ -8,286 +8,304 @@
 import SwiftUI
 
 struct SettingsView: View {
-	
-	@State private var shouldShowConfirmationAlert: Bool = false
-	@State private var hideViews: Bool = false // Hides other views to allow InfoView to take up more space
-	
-	@Binding var shouldShowSettingsSheet: Bool
-	
-	@State private var threshold: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
-	@State private var minimumMultiplier: String = String(UserDefaults.standard.float(forKey: "minimumMemoryUsageMultiplier"))
-	@State private var checkingFrequency: String = String(UserDefaults.standard.float(forKey: "checkingFrequency"))
-	
-	var body: some View {
-		VStack(spacing: 20) {
-			HStack {
-				Text("Settings")
-					.font(.system(size: 25))
-				Spacer()
-				Button(action: {
-					shouldShowSettingsSheet.toggle()
-				}, label: {
-					Text("Cancel")
-				}).padding(.leading)
-			}
-			Divider()
-			VStack {
-				HStack {
-					Text("Ignore processes that use less than:")
-					Spacer()
-				}
-				TextField("", text: $threshold)
-				HStack {
-					Text("MB of memory.")
-					Spacer()
-				}
-			}
-			VStack {
-				HStack {
-					Text("Warn me if a process uses at least:")
-					Spacer()
-				}
-				TextField("", text: $minimumMultiplier)
-				HStack {
-					Text("times the memory it was using when it was first tracked.")
-					Spacer()
-				}
-			}
-			VStack {
-				HStack {
-					Text("Check every:")
-					Spacer()
-				}
-				TextField("", text: $checkingFrequency)
-				HStack {
-					Text("seconds.")
-					Spacer()
-				}
-			}.padding(.bottom)
-			InfoView(hideViews: $hideViews)
-			if !hideViews {
-				ContactView()
-				IgnoredView()
-			}
-			Spacer()
-			Button(action: {
-				let acceptableThresholdRange = 200.0...1000.0
-				guard let thresholdFloat = Float(threshold), acceptableThresholdRange.contains(Double(thresholdFloat)) else {
-					shouldShowConfirmationAlert.toggle()
-					return
-				}
-				
-				let acceptableMultiplierRange = 1.2...2
-				guard let minimumMultiplierFloat = Float(minimumMultiplier), acceptableMultiplierRange.contains(Double(minimumMultiplierFloat)) else {
-					shouldShowConfirmationAlert.toggle()
-					return
-				}
-				
-				let acceptableFrequencyRange = 60.0...600.0
-				guard let checkingFrequencyFloat = Float(checkingFrequency), acceptableFrequencyRange.contains(Double(minimumMultiplierFloat)) else {
-					shouldShowConfirmationAlert.toggle()
-					return
-				}
-				
-				UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
-				UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageMultiplier")
-				UserDefaults.standard.set(checkingFrequencyFloat, forKey: "checkingFrequency")
-				
-				shouldShowSettingsSheet.toggle()
-			}, label: {
-				Image(systemName: "checkmark.circle.fill")
-					.font(.system(size: 40))
-			})
-			.buttonStyle(.borderless)
-			.padding()
-		}
-		.alert(isPresented: $shouldShowConfirmationAlert) {
-			Alert(
-				title: Text("These values appear to be unusual. Are you sure you want to save them?"),
-				primaryButton: .destructive(Text("Yes")) {
-					if let thresholdFloat = Float(threshold) {
-						UserDefaults.standard.set(thresholdFloat, forKey: "minimumMemoryUsageThreshold")
-					}
-					if let minimumMultiplierFloat = Float(minimumMultiplier) {
-						UserDefaults.standard.set(minimumMultiplierFloat, forKey: "minimumMemoryUsageMultiplier")
-					}
-					if let checkingFrequencyFloat = Float(checkingFrequency) {
-						UserDefaults.standard.set(checkingFrequencyFloat, forKey: "checkingFrequency")
-					}
-					
-					shouldShowSettingsSheet.toggle()
-				},
-				secondaryButton: .cancel())
-		}
-		.frame(width: 400, height: 750)
-		.padding()
-	}
-	
-	struct InfoView: View {
-		
-		@Binding var hideViews: Bool
-		
-		var body: some View {
-			ZStack {
-				RoundedRectangle(cornerRadius: 10)
-					.foregroundColor(Color(nsColor: .windowBackgroundColor))
-				VStack {
-					Button(action: {
-						withAnimation {
-							hideViews.toggle()
-						}
-					}, label: {
-						HStack {
-							Text("INFO")
-								.fontWeight(.bold)
-							Spacer()
-							Image(systemName: "chevron.right")
-								.rotationEffect(hideViews ? Angle(degrees: 90) : Angle(degrees: 0))
-						}
-					}).buttonStyle(.borderless)
-					Divider()
-					if hideViews {
-						HStack {
-							Text("Why are TurboRAM's values different from those in activity monitor?")
-								.font(.system(size: 13))
-							Spacer()
-						}
-						HStack {
-							Text("Activity Monitor uses the virtual memory size of a process, which includes both the physical memory (RAM) used by the process and any additional space reserved for the process in the swap file. TurboRAM shows the resident size of a process, which is the amount of physical memory (RAM) being used by the process only.")
-								.font(.system(size: 12))
-							Spacer()
-						}.padding(.top, 4)
-						HStack {
-							Text("Why is TurboRAM not notifying me?")
-								.font(.system(size: 13))
-							Spacer()
-						}.padding(.top, 8)
-						HStack {
-							Text("TurboRAM will only notify you if a process meets the thresholds you've set and your Mac is also running out of memory. Under normal conditions, it should never bother you.")
-								.font(.system(size: 12))
-							Spacer()
-						}.padding(.top, 5)
 
-					}
-				}
-				.padding()
-			}.frame(height: hideViews ? nil : 45)
-		}
-	}
-	
-	struct ContactView: View {
-		
-		@Environment(\.openURL) var openURL
-		
-		@State private var shouldExpand = false
-		
-		var body: some View {
-			ZStack {
-				RoundedRectangle(cornerRadius: 10)
-					.foregroundColor(Color(nsColor: .windowBackgroundColor))
-				VStack {
-					Button(action: {
-						withAnimation {
-							shouldExpand.toggle()
-						}
-					}, label: {
-						HStack {
-							Text("CONTACT ME")
-								.fontWeight(.bold)
-							Spacer()
-							Image(systemName: "chevron.right")
-								.rotationEffect(shouldExpand ? Angle(degrees: 90) : Angle(degrees: 0))
-						}
-					}).buttonStyle(.borderless)
-					Divider()
-					if shouldExpand {
-						HStack {
-							Button(action: {
-								openURL(URL(string: "mailto:apps.karandeepsingh@icloud.com")!)
-							}) {
-								HStack {
-									Spacer()
-									Text("Email")
-										.padding(3)
-									Spacer()
-								}
-							}
-							.buttonStyle(BorderlessButtonStyle())
-							.foregroundColor(.white)
-							.background(Color(NSColor.brown))
-							.cornerRadius(5)
-							Button(action: {
-								openURL(URL(string: "https://twitter.com/confuseious")!)
-							}) {
-								HStack {
-									Spacer()
-									Text("Twitter")
-										.padding(3)
-									Spacer()
-								}
-							}
-							.buttonStyle(BorderlessButtonStyle())
-							.foregroundColor(.white)
-							.background(Color(NSColor(red: 74/255, green: 153/255, blue: 233/255, alpha: 1)))
-							.cornerRadius(5)
-						}
-					}
-				}.padding()
-			}.frame(height: shouldExpand ? 100 : 45)
-		}
-	}
-	
-	struct IgnoredView: View {
-		
-		@State private var shouldExpand = false
-		
-		@State private var ignoredProcessNames: [String] = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
-		
-		var body: some View {
-			ZStack {
-				RoundedRectangle(cornerRadius: 10)
-					.foregroundColor(Color(nsColor: .windowBackgroundColor))
-				VStack {
-					Button(action: {
-						withAnimation {
-							shouldExpand.toggle()
-						}
-					}, label: {
-						HStack {
-							Text("IGNORED PROCESSES")
-								.fontWeight(.bold)
-							Spacer()
-							Image(systemName: "chevron.right")
-								.rotationEffect(shouldExpand ? Angle(degrees: 90) : Angle(degrees: 0))
-						}
-					}).buttonStyle(.borderless)
-					Divider()
-					if shouldExpand {
-						if ignoredProcessNames.isEmpty {
-							Text("No Processes")
-								.font(.system(size: 25))
-								.foregroundColor(.secondary)
-						} else {
-							List(ignoredProcessNames, id: \.self) { name in
-								HStack {
-									Text(name)
-									Spacer()
-									Button(action: {
-										if let index = ignoredProcessNames.firstIndex(where: {$0 == name}) {
-											withAnimation {
-												ignoredProcessNames.remove(at: index)
-												UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
-											}
-										}
-									}, label: {
-										Text("Unignore")
-									})
-								}
-							}.listStyle(InsetListStyle())
-						}
-					}
-				}.padding()
-			}.frame(height: shouldExpand ? nil : 45)
-		}
-	}
+    @Binding var shouldShowSettingsSheet: Bool
+
+    @State private var threshold:         String = String(format: "%.0f", UserDefaults.standard.float(forKey: "minimumMemoryUsageThreshold"))
+    @State private var minimumMultiplier: String = String(format: "%.2g", UserDefaults.standard.float(forKey: "minimumMemoryUsageMultiplier"))
+    @State private var checkingFrequency: String = String(format: "%.0f", UserDefaults.standard.float(forKey: "checkingFrequency"))
+
+    @State private var showOutOfRangeAlert = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // ── Toolbar ──────────────────────────────────────────────────
+            HStack {
+                Text("Settings")
+                    .font(.headline)
+                Spacer()
+                Button("Cancel") { shouldShowSettingsSheet = false }
+                    .buttonStyle(.borderless)
+            }
+            .padding(16)
+            Divider()
+
+            ScrollView {
+                VStack(spacing: 20) {
+                    // ── Thresholds ────────────────────────────────────────
+                    GroupBox {
+                        VStack(alignment: .leading, spacing: 14) {
+                            settingRow(
+                                icon: "memorychip",
+                                title: "Minimum memory threshold",
+                                detail: "Ignore processes using less than this amount",
+                                field: $threshold,
+                                unit: "MB",
+                                placeholder: "500"
+                            )
+                            Divider()
+                            settingRow(
+                                icon: "arrow.up.right.circle",
+                                title: "Growth multiplier",
+                                detail: "Warn when a process grows by at least this factor",
+                                field: $minimumMultiplier,
+                                unit: "×",
+                                placeholder: "1.5"
+                            )
+                            Divider()
+                            settingRow(
+                                icon: "clock.arrow.2.circlepath",
+                                title: "Check frequency",
+                                detail: "How often TurboRAM scans processes",
+                                field: $checkingFrequency,
+                                unit: "seconds",
+                                placeholder: "60"
+                            )
+                        }
+                        .padding(4)
+                    } label: {
+                        Label("Detection Rules", systemImage: "slider.horizontal.3")
+                    }
+
+                    // ── Info ──────────────────────────────────────────────
+                    InfoAccordion()
+
+                    // ── Ignored list ──────────────────────────────────────
+                    IgnoredProcessesAccordion()
+
+                    // ── Contact ───────────────────────────────────────────
+                    ContactAccordion()
+                }
+                .padding(16)
+            }
+
+            Divider()
+            // ── Save ─────────────────────────────────────────────────────
+            HStack {
+                Spacer()
+                Button {
+                    save()
+                } label: {
+                    Label("Save Settings", systemImage: "checkmark.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.regular)
+            }
+            .padding(16)
+        }
+        .frame(width: 420, height: 660)
+        .alert("Values out of recommended range", isPresented: $showOutOfRangeAlert) {
+            Button("Save Anyway", role: .destructive) { forceSave() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Threshold: 200–1000 MB · Multiplier: 1.2–2.0× · Frequency: 60–600s")
+        }
+    }
+
+    // MARK: - Row helper
+
+    @ViewBuilder
+    private func settingRow(icon: String, title: String, detail: String, field: Binding<String>, unit: String, placeholder: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+				.foregroundStyle(Color.accentColor)
+                .frame(width: 28)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .fontWeight(.medium)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                HStack {
+                    TextField(placeholder, text: field)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 90)
+                    Text(unit)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    // MARK: - Save logic
+
+    private func isInRange() -> Bool {
+        guard let t = Float(threshold),  (200...1000).contains(t) else { return false }
+        guard let m = Float(minimumMultiplier), (1.2...2.0).contains(m) else { return false }
+        guard let f = Float(checkingFrequency),  (60...600).contains(f) else { return false }
+        return true
+    }
+
+    private func save() {
+        if isInRange() {
+            forceSave()
+        } else {
+            showOutOfRangeAlert = true
+        }
+    }
+
+    private func forceSave() {
+        if let t = Float(threshold)         { UserDefaults.standard.set(t, forKey: "minimumMemoryUsageThreshold") }
+        if let m = Float(minimumMultiplier) { UserDefaults.standard.set(m, forKey: "minimumMemoryUsageMultiplier") }
+        if let f = Float(checkingFrequency) { UserDefaults.standard.set(f, forKey: "checkingFrequency") }
+        shouldShowSettingsSheet = false
+    }
+}
+
+// MARK: - Info accordion
+
+private struct InfoAccordion: View {
+    @State private var expanded = false
+    var body: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 10) {
+                Button {
+                    withAnimation(.spring(response: 0.3)) { expanded.toggle() }
+                } label: {
+                    HStack {
+                        Text("Why does TurboRAM show different values than Activity Monitor?")
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(expanded ? .degrees(90) : .zero)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+
+                if expanded {
+                    Text("TurboRAM reports the **resident size** — actual physical RAM used by a process. Activity Monitor shows the **virtual memory size**, which also includes swap space reserved on disk. TurboRAM's numbers will always be lower and more reflective of real RAM pressure.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Divider()
+                    Text("TurboRAM only alerts when **both** thresholds are met AND system memory pressure is ≥ 75%. Under good conditions it stays silent.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(4)
+        } label: {
+            Label("FAQ", systemImage: "questionmark.circle")
+        }
+    }
+}
+
+// MARK: - Ignored processes accordion
+
+private struct IgnoredProcessesAccordion: View {
+    @State private var expanded = false
+    @State private var ignoredNames: [String] = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
+
+    var body: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 10) {
+                Button {
+                    withAnimation(.spring(response: 0.3)) { expanded.toggle() }
+                } label: {
+                    HStack {
+                        Text("Ignored Processes")
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                        if !ignoredNames.isEmpty {
+                            Text("\(ignoredNames.count)")
+                                .font(.caption2.weight(.semibold))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.accentColor.opacity(0.15), in: Capsule())
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(expanded ? .degrees(90) : .zero)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+
+                if expanded {
+                    if ignoredNames.isEmpty {
+                        Label("No processes ignored", systemImage: "eye.slash")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(ignoredNames, id: \.self) { name in
+                            HStack {
+                                Image(systemName: "eye.slash")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text(name)
+                                    .font(.subheadline)
+                                Spacer()
+                                Button("Remove") {
+                                    ignoredNames.removeAll { $0 == name }
+                                    UserDefaults.standard.set(ignoredNames, forKey: "ignoredProcessNames")
+                                }
+                                .buttonStyle(.borderless)
+                                .foregroundStyle(.red)
+                                .font(.caption)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(4)
+        } label: {
+            Label("Ignored Processes", systemImage: "eye.slash")
+        }
+    }
+}
+
+// MARK: - Contact accordion
+
+private struct ContactAccordion: View {
+    @Environment(\.openURL) var openURL
+    @State private var expanded = false
+
+    var body: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 10) {
+                Button {
+                    withAnimation(.spring(response: 0.3)) { expanded.toggle() }
+                } label: {
+                    HStack {
+                        Text("Contact the Developer")
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(expanded ? .degrees(90) : .zero)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+
+                if expanded {
+                    HStack(spacing: 10) {
+                        Button {
+                            openURL(URL(string: "mailto:apps.karandeepsingh@icloud.com")!)
+                        } label: {
+                            Label("Email", systemImage: "envelope")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+
+                        Button {
+                            openURL(URL(string: "https://twitter.com/confuseious")!)
+                        } label: {
+                            Label("Twitter / X", systemImage: "bird")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                }
+            }
+            .padding(4)
+        } label: {
+            Label("Support", systemImage: "envelope")
+        }
+    }
 }
