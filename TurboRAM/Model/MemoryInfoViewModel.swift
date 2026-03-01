@@ -163,22 +163,23 @@ class MemoryInfoViewModel: ObservableObject {
             MemoryLayout<vm_statistics64>.size / MemoryLayout<integer_t>.size
         )
 
-        let kr: kern_return_t = withUnsafeMutablePointer(to: &stats) { statsPtr in
+        let _: kern_return_t = withUnsafeMutablePointer(to: &stats) { statsPtr in
             statsPtr.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { ptr in
                 host_statistics64(mach_host_self(), HOST_VM_INFO64, ptr, &count)
             }
         }
 
-        guard kr == KERN_SUCCESS else { return 0 }
+		let active   = UInt64(stats.active_count)
+		let wired    = UInt64(stats.wire_count)
+		let inactive = UInt64(stats.inactive_count)
+		let free     = UInt64(stats.free_count)
+		let page     = UInt64(vm_kernel_page_size)
 
-        let page     = UInt64(vm_kernel_page_size)
-        let used     = (UInt64(stats.active_count) + UInt64(stats.wire_count)) * page
-        let total    = used
-                     + UInt64(stats.inactive_count) * page
-                     + UInt64(stats.free_count)     * page
-        guard total > 0 else { return 0 }
+		let used  = (active + wired) * page
+		let total = (active + wired + inactive + free) * page
 
-        return min(100, Int(Double(used) / Double(total) * 100.0))
+		guard total > 0 else { return 0 }
+		return min(100, Int(Double(used) / Double(total) * 100.0))
     }
 
     // MARK: - Offending processes
@@ -199,13 +200,20 @@ class MemoryInfoViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Quit process  (replaces KillProcess.sh)
+    // MARK: - Quit process
 
-    func quitProcessWithPID(pid: Int) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            _ = kill(pid_t(pid), SIGKILL)
-        }
-    }
+	func quitProcessWithPID(pid: Int) {
+		DispatchQueue.global(qos: .userInitiated).async {
+			let p = pid_t(pid)
+			let res = kill(p, SIGTERM) // Ask process to quit nicely
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                if res != 0 {
+                    // Force kill if process is still alive after 2 seconds
+                    kill(p, SIGKILL)
+                }
+            }
+		}
+	}
 
     // MARK: - Helpers
 
