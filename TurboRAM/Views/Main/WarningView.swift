@@ -8,96 +8,144 @@
 import SwiftUI
 
 struct WarningView: View {
-	
-	@AppStorage("minimumMemoryUsageminimumMultiplier") private var minimumMemoryUsageminimumMultiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageminimumMultiplier")
-	@AppStorage("minimumMemoryUsageThreshold") private var minimumMemoryUsageThreshold = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
-	
-	@Binding var shouldShowWarningSheet: Bool
-	
-	@Binding var  offendingProcesses: [ProcessDetails]
-	
-	let memoryInfoViewModel: MemoryInfoViewModel
-	
-	let formatter: NumberFormatter = {
-		let formatter = NumberFormatter()
-		formatter.minimumFractionDigits = 0
-		formatter.maximumFractionDigits = 2
-		
-		return formatter
-	}()
-	
-	var body: some View {
-		VStack {
-			HStack {
-				Text("These processes have increased their memory usage to \(formatter.string(from: minimumMemoryUsageminimumMultiplier as NSNumber) ?? "unknown") times the memory when they were first tracked and are now using \(formatter.string(from: minimumMemoryUsageThreshold as NSNumber) ?? "")MB of memory or more.")
-				Spacer()
-				Button(action: {
-					shouldShowWarningSheet.toggle()
-				}, label: {
-					Text("Done")
-				}).padding(.leading)
-			}.padding(.bottom)
-			Divider()
-			if offendingProcesses.isEmpty {
-				Spacer()
-				Text("No Processes")
-					.font(.system(size: 25))
-					.foregroundColor(.secondary)
-			} else {
-				List(offendingProcesses) { process in
-					ZStack {
-						RoundedRectangle(cornerRadius: 10)
-							.foregroundColor(Color(nsColor: .windowBackgroundColor))
-						VStack {
-							HStack {
-								Text(process.processName)
-								Spacer()
-								Text("Current Usage: \(Int(process.memoryUsage))MB")
-							}
-							Button(action: {
-								if let index = offendingProcesses.firstIndex(where: {$0.id == process.id}) {
-									memoryInfoViewModel.quitProcessWithPID(pid: process.id)
-									offendingProcesses.remove(at: index)
-									memoryInfoViewModel.reloadMemoryInfo()
-								}
-							}, label: {
-								HStack {
-									Spacer()
-									Text("Quit Process")
-									Spacer()
-								}
-							})
-							//						Button(action: {
-							//							memoryInfoViewModel.ignoredProcessIDs.append(process.id)
-							//						}, label: {
-							//							Spacer()
-							//							Text("Ignore Process Today")
-							//							Spacer()
-							//						})
-							Button(action: {
-								if let index = offendingProcesses.firstIndex(where: {$0.id == process.id}) {
-									// memoryInfoViewModel.ignoredProcessIDs.append(process.id)
-									var ignoredProcessNames: [String] = (UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? [])
-									ignoredProcessNames.append(process.processName)
-									UserDefaults.standard.set(ignoredProcessNames, forKey: "ignoredProcessNames")
-									
-									withAnimation {
-										offendingProcesses.remove(at: index)
-										memoryInfoViewModel.reloadMemoryInfo()
-									}
-								}
-							}, label: {
-								Spacer()
-								Text("Ignore Process Forever")
-								Spacer()
-							})
-						}.padding()
-					}
-				}
-			}
-			Spacer()
-		}
-		.frame(width: 400, height: 400)
-		.padding()
-	}
+
+    @AppStorage("minimumMemoryUsageMultiplier") private var multiplier = UserDefaults.standard.double(forKey: "minimumMemoryUsageMultiplier")
+    @AppStorage("minimumMemoryUsageThreshold")  private var threshold  = UserDefaults.standard.double(forKey: "minimumMemoryUsageThreshold")
+
+    @Binding var shouldShowWarningSheet: Bool
+    @Binding var offendingProcesses: [ProcessDetails]
+
+    let memoryInfoViewModel: MemoryInfoViewModel
+
+    private let fmt: NumberFormatter = {
+        let f = NumberFormatter()
+        f.minimumFractionDigits = 0
+        f.maximumFractionDigits = 1
+        return f
+    }()
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack(spacing: 10) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.orange)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Memory Alert")
+                        .font(.headline)
+                    Text("These processes have grown ≥ \(fmt.string(from: multiplier as NSNumber) ?? "")× and are using ≥ \(fmt.string(from: threshold as NSNumber) ?? "")MB while memory pressure is high.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button("Done") { shouldShowWarningSheet = false }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
+            }
+            .padding(16)
+
+            Divider()
+
+            if offendingProcesses.isEmpty {
+                VStack(spacing: 8) {
+                    Image(systemName: "checkmark.circle")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.green)
+                    Text("No offending processes")
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                List {
+                    ForEach(offendingProcesses) { process in
+                        OffendingProcessRow(
+                            process: process,
+                            baseline: memoryInfoViewModel.initialValues[process.id],
+                            fmt: fmt,
+                            onQuit: {
+                                memoryInfoViewModel.quitProcessWithPID(pid: process.id)
+                                removeProcess(process)
+                                memoryInfoViewModel.reloadMemoryInfo()
+                            },
+                            onIgnoreForever: {
+                                var ignored = UserDefaults.standard.array(forKey: "ignoredProcessNames") as? [String] ?? []
+                                if !ignored.contains(process.processName) {
+                                    ignored.append(process.processName)
+                                    UserDefaults.standard.set(ignored, forKey: "ignoredProcessNames")
+                                }
+                                removeProcess(process)
+                            }
+                        )
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+        .frame(width: 480, height: 480)
+    }
+
+    private func removeProcess(_ process: ProcessDetails) {
+        withAnimation {
+            offendingProcesses.removeAll { $0.id == process.id }
+        }
+    }
+}
+
+// MARK: - Row
+
+private struct OffendingProcessRow: View {
+
+    let process: ProcessDetails
+    let baseline: Float?
+    let fmt: NumberFormatter
+    let onQuit: () -> Void
+    let onIgnoreForever: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(process.processName)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                HStack(spacing: 6) {
+                    Label("\(fmt.string(from: process.memoryUsage as NSNumber) ?? "")MB now", systemImage: "memorychip")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    if let base = baseline {
+                        Text("·")
+                            .foregroundStyle(.tertiary)
+                        Label("\(fmt.string(from: base as NSNumber) ?? "")MB baseline", systemImage: "chart.xyaxis.line")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            Spacer()
+            Button {
+                onIgnoreForever()
+            } label: {
+                Label("Ignore", systemImage: "eye.slash")
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .tint(.secondary)
+
+            Button {
+                onQuit()
+            } label: {
+                Label("Force Quit", systemImage: "xmark.circle")
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
+            .tint(.red)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color(nsColor: .controlBackgroundColor))
+        )
+    }
 }

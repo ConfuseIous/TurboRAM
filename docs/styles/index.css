@@ -1,0 +1,586 @@
+/* ===========================
+   Google Font
+   =========================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ===========================
+   Animated background particles
+   =========================== */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #4da6ff;
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+/* ===========================
+   Navigation
+   =========================== */
+nav#navbar {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover img {
+  transform: scale(1.1);
+}
+
+.logo span {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Desktop nav links */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #4da6ff;
+  border-radius: 2px;
+  transition: width 0.25s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Hamburger button — hidden on desktop */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  width: 36px;
+  height: 36px;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger open state */
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===========================
+   Hero Section
+   =========================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 2rem 4rem;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(77, 166, 255, 0.12) 0%, transparent 65%);
+  z-index: -1;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 30%, #4da6ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.25rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+.hero h2 {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: #aaaaaa;
+  margin-bottom: 2.5rem;
+  max-width: 560px;
+  line-height: 1.65;
+  font-weight: 400;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  margin: 1.5rem 0 2rem;
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(77, 166, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 32px 70px rgba(77, 166, 255, 0.22), 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ===========================
+   Download Section
+   =========================== */
+.download-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 1.25rem 1.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.download-link {
+  height: 54px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 10px;
+  display: block;
+}
+
+.download-link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(77, 166, 255, 0.25);
+}
+
+/* ===========================
+   Features Section
+   =========================== */
+.features {
+  padding: 6rem 2rem 5rem;
+  background: linear-gradient(180deg, #0d0d0d 0%, #111111 50%, #0d0d0d 100%);
+  position: relative;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77, 166, 255, 0.6), transparent);
+}
+
+.features-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-heading {
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.03em;
+}
+
+.features-subheading {
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  font-weight: 400;
+}
+
+/* Features grid — 3 columns on wide, 2 on medium, 1 on mobile */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* Feature card — vertical image-on-top layout */
+.feature-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(77, 166, 255, 0.07) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.feature-card:hover::after {
+  opacity: 1;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(77, 166, 255, 0.15);
+  border-color: rgba(77, 166, 255, 0.25);
+}
+
+/* Image area — square crop */
+.feature-icon-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Variant for SVG illustration cards */
+.feature-icon-wrapper--text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(77, 166, 255, 0.06);
+}
+
+.feature-svg {
+  width: 50%;
+  height: 50%;
+}
+
+.feature-icon {
+  width: 100%;
+  height: 100%;
+  padding: 5%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.05);
+}
+
+/* Text content area */
+.feature-content {
+  padding: 1.25rem 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.feature-content h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.feature-content p {
+  color: #999999;
+  line-height: 1.6;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* ===========================
+   Card reveal animation
+   =========================== */
+.feature-card.loading {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.feature-card.loading.visible {
+  animation: cardFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================
+   Smooth scrolling
+   =========================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===========================
+   Site Footer
+   =========================== */
+.site-footer {
+  background: #070707;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2.5rem 2rem;
+  color: #888;
+  font-size: 0.875rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-logo img {
+  border-radius: 6px;
+}
+
+.footer-logo span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.5rem;
+}
+
+.footer-links a {
+  color: #777;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #4da6ff;
+}
+
+.footer-copy {
+  margin: 0;
+  color: #444;
+}
+
+/* ===========================
+   Responsive — Tablet (≤ 960px)
+   =========================== */
+@media (max-width: 960px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===========================
+   Responsive — Mobile (≤ 680px)
+   =========================== */
+@media (max-width: 680px) {
+  /* Show hamburger, hide desktop links */
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(0, 0, 0, 0.97);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.5rem 0 1rem;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links li {
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .nav-links a::after {
+    display: none;
+  }
+
+  .nav-links a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding: 4rem 1.25rem 3rem;
+  }
+
+  /* Features */
+  .features {
+    padding: 4rem 1.25rem 3.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Download section */
+  .download-section {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-container {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .feature-content {
+    padding: 1rem 1.1rem 1.25rem;
+  }
+}

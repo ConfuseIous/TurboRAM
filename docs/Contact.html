@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="icon" href="./assets/images/appIcon.webp" />
+    <title>TurboRAM - Contact</title>
+    <meta name="description"
+        content="Contact the developer of TurboRAM — smart RAM monitoring for your Mac, right from the menu bar.">
+    <meta property="og:title" content="TurboRAM - Contact">
+    <link rel="canonical" href="https://turboram.ksapps.com/Contact" />
+
+    <link rel="stylesheet" href="styles/nav.css">
+    <link rel="stylesheet" href="styles/contact.css">
+</head>
+
+<body>
+    <nav class="site-nav" style="position: relative;">
+        <div class="nav-container">
+            <a class="nav-logo" href="index.html">
+                <img src="./assets/images/appIcon.webp" alt="TurboRAM Icon" width="34" height="34">
+                <span>TurboRAM</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Contact" class="active">Contact</a></li>
+                <li><a href="PrivacyPolicy">Privacy</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mainContainer">
+        <div class="container">
+            <h1>Contact</h1>
+            <h3 id="contactText">
+                If you have any questions or feedback, I'd love to hear from you. Just reach out via any of the
+                following methods.
+            </h3>
+            <br />
+            <div class="contactMethods">
+                <p class="contactMethod">✉️ Email: <a href="mailto:turboram@ksapps.com">turboram@ksapps.com</a></p>
+                <p class="contactMethod">𝕏 Twitter: <a href="https://twitter.com/confuseious">Confuseious</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>

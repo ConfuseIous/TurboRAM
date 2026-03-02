@@ -27,6 +27,7 @@ Temporary Items
 
 # Xcode
 UserInterfaceState.xcuserstate
+*.xcuserdatad
 
 # Logs
 logs
@@ -51,3 +52,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# React Native
+.expo
+expo-env.d.ts
