@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="icon" href="./assets/images/appIcon.webp" />
+    <title>TurboRAM - Privacy Policy</title>
+    <meta name="description"
+        content="Privacy Policy for TurboRAM — smart RAM monitoring for your Mac, right from the menu bar.">
+    <meta property="og:title" content="TurboRAM - Privacy Policy">
+    <link rel="canonical" href="https://turboram.ksapps.com/PrivacyPolicy" />
+
+    <link rel="stylesheet" href="styles/nav.css">
+    <link rel="stylesheet" href="styles/privacy.css">
+</head>
+
+<body>
+    <nav class="site-nav" style="position: relative;">
+        <div class="nav-container">
+            <a class="nav-logo" href="index.html">
+                <img src="./assets/images/appIcon.webp" alt="TurboRAM Icon" width="34" height="34">
+                <span>TurboRAM</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Contact">Contact</a></li>
+                <li><a href="PrivacyPolicy" class="active">Privacy</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="privacy-container">
+        <div class="privacy-header">
+            <h1>Privacy Policy</h1>
+            <p class="privacy-intro">
+                TurboRAM values your privacy. No tracking, no data collection, no internet connection required.
+            </p>
+        </div>
+
+        <div class="privacy-content">
+            <p>TurboRAM is provided by Karandeep Singh. For any questions or concerns, please contact me via <a
+                    href="mailto:turboram@ksapps.com">Email</a>.</p>
+            <p>
+                TurboRAM does not collect any personal data. The app operates entirely on your device and never
+                connects to the internet. All memory monitoring is done locally and nothing is transmitted or stored
+                outside of your Mac.
+            </p>
+            <p>
+                This privacy policy may be updated at any time but will never be used to collect more data than is
+                necessary. I believe in transparency and privacy, and this will not change.
+            </p>
+        </div>
+
+        <div class="privacy-footer">
+            <p>Thank you for using TurboRAM.</p>
+        </div>
+    </div>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>

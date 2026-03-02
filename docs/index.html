@@ -1,228 +1,273 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/images/appIcon.webp">
+    <link rel="apple-touch-icon" href="./assets/images/appIcon.webp">
+
+    <!-- Primary Meta -->
     <title>TurboRAM - Smart RAM Management for Your Mac</title>
-    <style>
-        :root {
-            --primary-color: #2D3748;
-            --accent-color: #4A5568;
-            --background-color: #F7FAFC;
-            --text-color: #1A202C;
-            --highlight-color: #3182CE;
-        }
+    <meta name="description"
+        content="Always running out of RAM? TurboRAM monitors all your Mac processes and alerts you the moment memory usage spikes — right from the menu bar. Customizable, lightweight, and completely private.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="TurboRAM">
+    <meta name="keywords"
+        content="RAM cleaner, memory manager, Mac RAM, menu bar app, memory monitor, macOS utility, process monitor, RAM alert, TurboRAM">
+    <link rel="canonical" href="https://turboram.ksapps.com/">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
-        }
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://apps.apple.com">
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://turboram.ksapps.com/">
+    <meta property="og:title" content="TurboRAM - Smart RAM Management for Your Mac">
+    <meta property="og:description"
+        content="Always running out of RAM? TurboRAM monitors all your Mac processes and alerts you the moment memory usage spikes — right from the menu bar.">
+    <meta property="og:image" content="https://turboram.ksapps.com/assets/images/TurboRAM_Main.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="TurboRAM">
 
-        h1,
-        h2 {
-            color: var(--primary-color);
-        }
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TurboRAM - Smart RAM Management for Your Mac">
+    <meta name="twitter:description"
+        content="Always running out of RAM? TurboRAM monitors all your Mac processes and alerts you the moment memory usage spikes.">
+    <meta name="twitter:image" content="https://turboram.ksapps.com/assets/images/TurboRAM_Main.png">
 
-        h1 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.5px;
-        }
+    <!-- Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "TurboRAM",
+      "operatingSystem": "macOS",
+      "applicationCategory": "UtilitiesApplication",
+      "description": "Always running out of RAM? TurboRAM monitors all your Mac processes and alerts you the moment memory usage spikes — right from the menu bar.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "url": "https://turboram.ksapps.com/",
+      "image": "https://turboram.ksapps.com/assets/images/appIcon.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "TurboRAM"
+      }
+    }
+    </script>
 
-        h2 {
-            font-size: 1.5rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #E2E8F0;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-            background: linear-gradient(to bottom, #EBF4FF, var(--background-color));
-            border-radius: 12px;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--accent-color);
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .feature-card {
-            padding: 1.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .feature-card h3 {
-            color: var(--highlight-color);
-            margin-top: 0;
-        }
-
-        .screenshots {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .screenshot {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .screenshot img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .section {
-            margin-bottom: 3rem;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 1px solid #E2E8F0;
-            color: var(--accent-color);
-        }
-
-        a {
-            color: var(--highlight-color);
-            text-decoration: none;
-            border-bottom: 1px solid currentColor;
-            transition: opacity 0.2s ease;
-        }
-
-        a:hover {
-            opacity: 0.8;
-        }
-
-        @media (max-width: 640px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .container {
-                padding: 20px;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/index.css">
 </head>
 
 <body>
-    <div class="container">
-        <header class="hero">
-            <h1>TurboRAM</h1>
-            <p>Always running out of RAM? TurboRAM is the solution.</p>
-            <p>Efficient memory monitoring for your Mac, right from the menu bar.</p>
-        </header>
-
-        <section class="section">
-            <h2>HOW IT WORKS</h2>
-            <p>TurboRAM efficiently monitors all processes running on your system, immediately alerting you to any
-                significant changes in memory usage. Just define the threshold to be notified at, and TurboRAM keeps an
-                eye on RAM usage for you.</p>
-        </section>
-
-        <section class="section">
-            <h2>FEATURES</h2>
-            <div class="features">
-                <div class="feature-card">
-                    <h3>Customizable</h3>
-                    <p>Set your own RAM threshold and refresh frequency to match your needs</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Menu Bar App</h3>
-                    <p>Always accessible but never in your way - right in your menu bar</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Optimized</h3>
-                    <p>Built for efficiency with minimal system impact</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Privacy-First</h3>
-                    <p>Zero tracking, zero data collection, zero internet connection needed</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>SCREENSHOTS</h2>
-            <div class="screenshots">
-                <div class="screenshot">
-                    <img src="1.png" alt="TurboRAM Screenshot 1" />
-                </div>
-                <div class="screenshot">
-                    <img src="2.png" alt="TurboRAM Screenshot 2" />
-                </div>
-                <div class="screenshot">
-                    <img src="3.png" alt="TurboRAM Screenshot 3" />
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>PRIVACY POLICY</h2>
-            <p>TurboRAM exists only to help your computer run smoothly. It does not track you, share any data, or even
-                connect to the internet. I built this app to solve a problem that I see people facing every day. I am
-                not interested in your data, and I don't like unnecessary tracking.</p>
-        </section>
-
-        <section class="section">
-            <h2>SUPPORT</h2>
-            <p>I take all feedback into consideration to continually improve your experience, and answer emails within
-                24 hours at most. You can email me at <a href="mailto:turboram@ksapps.com">turboram@ksapps.com</a>.</p>
-        </section>
-
-        <section class="section">
-            <h2>CONTRIBUTING</h2>
-            <p>If you want to improve the app, feel free to submit a PR and I'll have a look! The project is open to
-                community contributions.</p>
-        </section>
-
-        <footer class="footer">
-            &copy; 2025 <a href="https://ksapps.com">Karandeep Singh</a>
-        </footer>
+    <!-- Animated background particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 1s;"></div>
     </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" style="position: relative;">
+        <div class="nav-container">
+            <a class="logo" href="#">
+                <img src="./assets/images/appIcon.webp" alt="TurboRAM Icon">
+                <span>TurboRAM</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="Contact">Contact</a></li>
+                <li><a href="PrivacyPolicy">Privacy</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Never run out of RAM again.</h1>
+        <h2>TurboRAM monitors every process on your Mac and alerts you the moment memory usage spikes — right from your
+            menu bar.</h2>
+        <img src="./assets/images/TurboRAM_Main.png" alt="TurboRAM app showing memory usage overview on macOS"
+            class="hero-image" width="800" height="533" fetchpriority="high">
+
+        <div class="download-section">
+            <a href="https://apps.apple.com/app/turboram" rel="noopener noreferrer" target="_blank">
+                <img src="./assets/images/AppStore.svg" class="download-link" alt="Download on the Mac App Store">
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="features-container">
+            <h2 class="features-heading">Everything you need to stay in control</h2>
+            <p class="features-subheading">Lightweight RAM monitoring built specifically for macOS.</p>
+            <div class="features-grid">
+                <div class="feature-card loading">
+                    <div class="feature-icon-wrapper">
+                        <img src="./assets/images/TurboRAM_MenuBar.png"
+                            alt="TurboRAM menu bar icon showing live memory usage" class="feature-icon" loading="lazy">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Menu Bar App</h3>
+                        <p>Always accessible but never in your way — live RAM stats right in your menu bar.</p>
+                    </div>
+                </div>
+                <div class="feature-card loading">
+                    <div class="feature-icon-wrapper">
+                        <img src="./assets/images/TurboRAM_Main.png"
+                            alt="TurboRAM process list showing memory usage per app" class="feature-icon"
+                            loading="lazy">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Process Monitor</h3>
+                        <p>See exactly which apps are consuming your memory, sorted and updated in real time.</p>
+                    </div>
+                </div>
+                <div class="feature-card loading">
+                    <div class="feature-icon-wrapper">
+                        <img src="./assets/images/TurboRAM_Settings.png"
+                            alt="TurboRAM settings panel showing threshold and refresh frequency controls"
+                            class="feature-icon" loading="lazy">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Customizable Alerts</h3>
+                        <p>Set your own RAM threshold and get notified the moment usage crosses it.</p>
+                    </div>
+                </div>
+                <div class="feature-card loading">
+                    <div class="feature-icon-wrapper feature-icon-wrapper--text">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="feature-svg"
+                            aria-hidden="true">
+                            <rect x="10" y="28" width="60" height="24" rx="6" stroke="#4da6ff" stroke-width="3" />
+                            <rect x="18" y="36" width="8" height="8" rx="2" fill="#4da6ff" opacity="0.8" />
+                            <rect x="32" y="36" width="8" height="8" rx="2" fill="#4da6ff" opacity="0.5" />
+                            <rect x="46" y="36" width="8" height="8" rx="2" fill="#4da6ff" opacity="0.3" />
+                            <line x1="34" y1="28" x2="34" y2="22" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="46" y1="28" x2="46" y2="22" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="70" y1="34" x2="74" y2="34" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="70" y1="40" x2="74" y2="40" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="70" y1="46" x2="74" y2="46" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="6" y1="34" x2="10" y2="34" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="6" y1="40" x2="10" y2="40" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="6" y1="46" x2="10" y2="46" stroke="#4da6ff" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Optimized</h3>
+                        <p>Built for efficiency with minimal CPU and memory overhead — TurboRAM won't slow your Mac.</p>
+                    </div>
+                </div>
+                <div class="feature-card loading">
+                    <div class="feature-icon-wrapper feature-icon-wrapper--text">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="feature-svg"
+                            aria-hidden="true">
+                            <circle cx="40" cy="40" r="24" stroke="#4da6ff" stroke-width="3" />
+                            <path d="M30 40 L37 47 L52 32" stroke="#4da6ff" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M40 16 L40 10" stroke="#4da6ff" stroke-width="2.5" stroke-linecap="round" />
+                            <path d="M40 70 L40 64" stroke="#4da6ff" stroke-width="2.5" stroke-linecap="round" />
+                            <path d="M16 40 L10 40" stroke="#4da6ff" stroke-width="2.5" stroke-linecap="round" />
+                            <path d="M70 40 L64 40" stroke="#4da6ff" stroke-width="2.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Privacy-First</h3>
+                        <p>Zero tracking, zero data collection, zero internet connection needed. What happens on your
+                            Mac, stays on your Mac.</p>
+                    </div>
+                </div>
+                <div class="feature-card loading">
+                    <div class="feature-icon-wrapper feature-icon-wrapper--text">
+                        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="feature-svg"
+                            aria-hidden="true">
+                            <rect x="20" y="18" width="40" height="44" rx="6" stroke="#4da6ff" stroke-width="3" />
+                            <line x1="28" y1="30" x2="52" y2="30" stroke="#4da6ff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <line x1="28" y1="38" x2="52" y2="38" stroke="#4da6ff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <line x1="28" y1="46" x2="44" y2="46" stroke="#4da6ff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <circle cx="54" cy="54" r="9" fill="#0d0d0d" stroke="#4da6ff" stroke-width="2.5" />
+                            <line x1="54" y1="50" x2="54" y2="54" stroke="#4da6ff" stroke-width="2"
+                                stroke-linecap="round" />
+                            <circle cx="54" cy="57" r="1" fill="#4da6ff" />
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Open Source &amp; Free</h3>
+                        <p>TurboRAM is completely free and open source. Feel free to contribute or inspect the code.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="./assets/images/appIcon.webp" alt="TurboRAM app icon" width="32" height="32">
+                <span>TurboRAM</span>
+            </div>
+            <nav class="footer-links" aria-label="Footer navigation">
+                <a href="#">Home</a>
+                <a href="#features">Features</a>
+                <a href="Contact">Contact</a>
+                <a href="PrivacyPolicy">Privacy Policy</a>
+            </nav>
+            <p class="footer-copy">&copy; <span id="footer-year"></span> <a href="https://ksapps.com"
+                    style="color: inherit; text-decoration: underline;">Karandeep Singh</a>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/index.js"></script>
+    <script>
+        // Hamburger menu toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+        // Close mobile menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
 </body>
 
 </html>
