@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <g fill="white">
+
+    <!-- Outer housing -->
+    <circle cx="512" cy="512" r="360"/>
+
+    <!-- Pipe tab -->
+    <rect x="720" y="200" width="140" height="200" rx="40"/>
+
+    <!-- Inner chamber cutout (larger opening) -->
+    <circle cx="512" cy="512" r="270" fill="black"/>
+
+    <!-- Slimmer blades -->
+    <g transform="translate(512,512)">
+      <path d="M -18,-40 L -32,-240 Q -100,-205 -120,-135 Q -85,-75 -18,-40 Z"/>
+      <g transform="rotate(60)">
+        <path d="M -18,-40 L -32,-240 Q -100,-205 -120,-135 Q -85,-75 -18,-40 Z"/>
+      </g>
+      <g transform="rotate(120)">
+        <path d="M -18,-40 L -32,-240 Q -100,-205 -120,-135 Q -85,-75 -18,-40 Z"/>
+      </g>
+      <g transform="rotate(180)">
+        <path d="M -18,-40 L -32,-240 Q -100,-205 -120,-135 Q -85,-75 -18,-40 Z"/>
+      </g>
+      <g transform="rotate(240)">
+        <path d="M -18,-40 L -32,-240 Q -100,-205 -120,-135 Q -85,-75 -18,-40 Z"/>
+      </g>
+      <g transform="rotate(300)">
+        <path d="M -18,-40 L -32,-240 Q -100,-205 -120,-135 Q -85,-75 -18,-40 Z"/>
+      </g>
+    </g>
+
+    <!-- Smaller hub -->
+    <circle cx="512" cy="512" r="48"/>
+
+  </g>
+</svg>

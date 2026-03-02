@@ -34,8 +34,11 @@ struct MenuBarView: View {
         VStack(spacing: 0) {
             // ── Header ─────────────────────────────────────────────────────
             HStack {
-                Image(systemName: "memorychip")
-                    .foregroundStyle(.secondary)
+                Image("appIcon-monochrome")
+					.resizable()
+					.aspectRatio(contentMode: .fit)
+					.frame(width: 25)
+					.foregroundColor(.secondary)
                 Text("TurboRAM")
                     .font(.headline)
                 Spacer()

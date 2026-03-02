@@ -105,9 +105,11 @@ struct HomeView: View {
 
     private var headerBar: some View {
         HStack(spacing: 12) {
-            Image(systemName: "memorychip")
-                .font(.title2)
-                .foregroundStyle(.secondary)
+			Image("appIcon-monochrome")
+				.resizable()
+				.aspectRatio(contentMode: .fit)
+				.frame(width: 40)
+				.foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 2) {
                 Text("TurboRAM")
                     .font(.headline)
